@@ -15,7 +15,7 @@ def flake8_reporter(config, previous_reports):
     return flake8_result
 
 
-def django_unittest_reporter(config, previous_reports):
+def django_test_reporter(config, previous_reports):
     """
     Generates unittest report object (dictionary) for given modules.
     """
@@ -26,10 +26,27 @@ def django_unittest_reporter(config, previous_reports):
     return unittest_result
 
 
-def django_unittest_coverage_reporter(config, previous_reports):
+def coverage_django_test_reporter(config, previous_reports):
     """
-    Generates unittest and test coverage report object (dictionary).
-    Requires coverage in path (coverage.py).
+    Generates unittest report object (dictionary). Runs through coverage.py so that
+    subsequent coverage reporter can gather data. Requires coverage in path (coverage.py).
+    """
+    process = subprocess.Popen([
+        'coverage', 'run',
+        config['manage_path'], 'test', '--noinput'] + config['test_modules'],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    out, err = process.communicate()
+    # FIXME: error handling
+    unittest_result = parse_unittest_output(err.decode('utf-8'))
+
+    return unittest_result
+
+
+def coverage_py_reporter(config, previous_reports):
+    """
+    Generates test coverage report object (dictionary). Requires coverage in path (coverage.py).
+    Must be invoked after one of coverage-report-generating reporters (like coverage_django_test_reporter).
     """
     process = subprocess.Popen(['coverage', 'report'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = process.communicate()

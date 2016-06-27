@@ -1,6 +1,8 @@
-from .mocks import flake8_output, unittest_output, coverage_output, eslint_output, karma_output
-from inspectr.reporters import django_unittest_reporter, django_unittest_coverage_reporter, flake8_reporter, eslint_reporter, karma_reporter, karma_coverage_reporter
 import subprocess
+
+from .mocks import flake8_output, unittest_output, coverage_output, eslint_output, karma_output
+from inspectr.reporters import (django_test_reporter, flake8_reporter, eslint_reporter, karma_reporter,
+                                karma_coverage_reporter, coverage_django_test_reporter, coverage_py_reporter)
 
 
 class Process(object):
@@ -42,10 +44,10 @@ def test_flake8_reporter(monkeypatch):
     assert bool(report)  # detailed testing in test_parsers.py
 
 
-def test_django_unittest_reporter(monkeypatch):
+def test_django_test_reporter(monkeypatch):
     monkeypatch.setattr(subprocess, 'Popen', mockpopen)
 
-    report = django_unittest_reporter({
+    report = django_test_reporter({
         'manage_path': 'manage.py',
         'test_modules': []
     }, [])
@@ -53,15 +55,23 @@ def test_django_unittest_reporter(monkeypatch):
     assert bool(report)  # detailed testing in test_parsers.py
 
 
-def test_django_unittest_coverage_reporter(monkeypatch):
+def test_coverage_django_test_reporter(monkeypatch):
     monkeypatch.setattr(subprocess, 'Popen', mockpopen)
 
-    report = django_unittest_coverage_reporter({
+    report = coverage_django_test_reporter({
         'manage_path': 'manage.py',
         'test_modules': []
     }, [])
 
     assert bool(report)  # detailed testing in test_parsers.py
+
+
+def test_coverage_py_reporter(monkeypatch):
+    monkeypatch.setattr(subprocess, 'Popen', mockpopen)
+
+    report = coverage_py_reporter({}, [])
+
+    assert bool(report)
 
 
 def test_eslint_reporter(monkeypatch):

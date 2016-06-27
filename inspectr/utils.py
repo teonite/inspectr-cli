@@ -10,15 +10,21 @@ common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'reth
 
 reporter_required_settings = {
     'flake8': ['lint_paths'],
-    'django-unittest': [],
-    'django-unittest-coverage': [],
+    'django-test': [],
+    'coverage-django-test': [],
+    'coverage-py': [],
     'eslint': ['lint_paths'],
     'karma': [],
-    'karma-coverage': []
+    'karma-coverage': [],
+    'pytest': []
 }
 
 default_settings = {
-    'django-unittest': {
+    'django-test': {
+        'manage_path': 'manage.py',
+        'test_modules': []
+    },
+    'coverage-django-test': {
         'manage_path': 'manage.py',
         'test_modules': []
     },
@@ -56,7 +62,13 @@ def validate_and_parse_config(config_in):
                 print('Error: flake8 not installed.')
                 sys.exit(1)
 
-        if reporter['type'] == 'django-unittest-coverage':
+        if reporter['type'] == 'coverage-django-test':
+            # check if coverage.py is installed
+            if find_executable('coverage') is None:
+                print('Error: coverage.py not installed.')
+                sys.exit(1)
+
+        if reporter['type'] == 'coverage-py':
             # check if coverage.py is installed
             if find_executable('coverage') is None:
                 print('Error: coverage.py not installed.')
