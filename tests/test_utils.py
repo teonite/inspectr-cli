@@ -24,32 +24,7 @@ def test_validate_and_parse_config():
         "rethinkdb_port": 28015,
         "rethinkdb_db": "inspectr",
 
-        "reporters": [
-            {
-                "type": "eslint",
-                "lint_paths": [
-                    "src/ng-app/project-app"
-                ]
-            },
-            {
-                "type": "karma"
-            },
-            {
-                "type": "karma-coverage"
-            },
-            {
-                "type": "flake8",
-                "lint_paths": ["apps/api/"]
-            },
-            {
-                "type": "django-unittest",
-                "manage_path": "tools/manage.py",
-                "test_modules": ["apps.core"]
-            },
-            {
-                "type": "django-unittest-coverage"
-            }
-        ]
+        "reporters": []
     }
 
     config = validate_and_parse_config(config_dict)

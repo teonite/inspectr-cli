@@ -26,13 +26,13 @@ def get_datetime():
 def run():
     # FIXME: config location as command line param
     config_path = 'inspectr.json'
-    with open(config_path, 'r') as config_file:
-        try:
+    try:
+        with open(config_path, 'r') as config_file:
             # load config file
             config_dict = loads(config_file.read())
-        except:
-            print('Error: parsing configuration file %s failed' % config_path)
-            sys.exit(1)
+    except:
+        print('Error: parsing configuration file %s failed' % config_path)
+        sys.exit(1)
 
     config = validate_and_parse_config(config_dict)
 
