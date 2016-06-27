@@ -1,7 +1,8 @@
 from json import loads
 import sys
 
-from .reporters import django_unittest_reporter, django_unittest_coverage_reporter, flake8_reporter, eslint_reporter, karma_reporter, karma_coverage_reporter
+from .reporters import (flake8_reporter, django_test_reporter, coverage_django_test_reporter, eslint_reporter, karma_reporter,
+                        karma_coverage_reporter, pytest_reporter, coverage_pytest_reporter, coverage_py_reporter)
 from .utils import save_report, validate_and_parse_config
 import time
 from datetime import datetime
@@ -10,11 +11,14 @@ from pytz import timezone
 
 reporters = {
     'flake8': flake8_reporter,
-    'django-unittest': django_unittest_reporter,
-    'django-unittest-coverage': django_unittest_coverage_reporter,
+    'django-test': django_test_reporter,
+    'coverage-django-test': coverage_django_test_reporter,
     'eslint': eslint_reporter,
     'karma': karma_reporter,
-    'karma-coverage': karma_coverage_reporter
+    'karma-coverage': karma_coverage_reporter,
+    'pytest': pytest_reporter,
+    'coverage-pytest': coverage_pytest_reporter,
+    'coverage-py': coverage_py_reporter
 }
 
 

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from copy import deepcopy
 import sys
 from distutils.spawn import find_executable
@@ -8,16 +9,11 @@ reports_history_table = 'reports_history'
 
 common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']
 
-reporter_required_settings = {
+reporter_required_settings = defaultdict(list)
+reporter_required_settings.update({
     'flake8': ['lint_paths'],
-    'django-test': [],
-    'coverage-django-test': [],
-    'coverage-py': [],
     'eslint': ['lint_paths'],
-    'karma': [],
-    'karma-coverage': [],
-    'pytest': []
-}
+})
 
 default_settings = {
     'django-test': {
@@ -30,6 +26,12 @@ default_settings = {
     },
     'karma': {
         'karma_config': 'karma.conf.js'
+    },
+    'pytest': {
+        'test_paths': []
+    },
+    'coverage-pytest': {
+        'test_paths': []
     }
 }
 
@@ -79,6 +81,18 @@ def validate_and_parse_config(config_in):
             if find_executable('eslint') is None:
                 print('Error: eslint not installed.')
                 sys.exit(1)
+
+        if reporter['type'] == 'pytest' or reporter['type'] == 'coverage-pytest':
+            # check if pytest installed
+            if find_executable('py.test') is None:
+                print('Error: py.test not installed.')
+                sys.exit(1)
+
+            # check if coverage installed
+            if find_executable('coverage') is None:
+                print('Error: coverage.py not installed.')
+                sys.exit(1)
+
 
         if reporter['type'] == 'karma' or reporter['type'] == 'karma-coverage':
             # check if karma installed

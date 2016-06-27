@@ -1,5 +1,7 @@
-from .fixtures import flake8_output, unittest_output, coverage_output, eslint_output, karma_output, karma_summary_fail_line, karma_summary_success_line, karma_coverage_summary_line, coverage_output_small
-from inspectr.parsers import parse_flake8_output, parse_unittest_output, parse_coverage_output, parse_eslint_output, parse_karma_output, extract_karma_coverage_summary, extract_karma_summary, parse_karma_coverage_output
+from .fixtures import (flake8_output, unittest_output, coverage_output, eslint_output, karma_output, karma_summary_fail_line,
+                       karma_summary_success_line, karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail)
+from inspectr.parsers import (parse_flake8_output, parse_unittest_output, parse_coverage_output, parse_eslint_output, parse_karma_output,
+                              extract_karma_coverage_summary, extract_karma_summary, parse_karma_coverage_output, parse_pytest_output)
 
 
 def test_parse_flake8_output():
@@ -39,6 +41,26 @@ def test_parse_coverage_output_small():
         'total_statements': 140,
         'total_missing': 97,
         'coverage_percent': 31
+    }
+
+
+def test_parse_pytest_output_success():
+    parsed = parse_pytest_output(pytest_output_success)
+    assert len(parsed['output']) == 10
+
+    assert parsed['summary'] == {
+        'passed_tests': 21,
+        'failed_tests': 0,
+    }
+
+
+def test_parse_pytest_output_fail():
+    parsed = parse_pytest_output(pytest_output_fail)
+    assert len(parsed['output']) == 13
+
+    assert parsed['summary'] == {
+        'passed_tests': 38,
+        'failed_tests': 4,
     }
 
 

@@ -85,3 +85,30 @@ karma_output = dedent("""\
 karma_coverage_summary_line = "All files          |     4.82 |     0.43 |     0.78 |     4.91 |                |"
 karma_summary_success_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 SUCCESS (0.205 secs / 0.001 secs)"
 karma_summary_fail_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 (1 FAILED) ERROR (0.21 secs / 0.001 secs)"
+
+pytest_output_fail = dedent("""\
+    __________________________________________________________________________________________ test_coverage_pytest_reporter ___________________________________________________________________________________________
+
+    monkeypatch = <_pytest.monkeypatch.monkeypatch object at 0x7f7fd9b752e8>
+
+        def test_coverage_pytest_reporter(monkeypatch):
+            monkeypatch.setattr(subprocess, 'Popen', mockpopen)
+
+    >       report = coverage_pytest_reporter({}, [])
+    E       NameError: name 'coverage_pytest_reporter' is not defined
+
+    tests/test_reporters.py:80: NameError
+    ======================================================================================= 4 failed, 38 passed in 0.10 seconds ========================================================================================
+    """)
+
+pytest_output_success = dedent("""\
+    =============================================================================================== test session starts ================================================================================================
+    platform linux -- Python 3.5.1, pytest-2.9.2, py-1.4.31, pluggy-0.3.1
+    rootdir: /home/jck/workspace/work/teonite/inspectr/inspectr/inspectr, inifile:
+    plugins: mock-1.1
+    collected 21 items
+
+    tests/test_utils.py .....................
+
+    ============================================================================================ 21 passed in 0.05 seconds =============================================================================================
+    """)

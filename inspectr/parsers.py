@@ -8,7 +8,7 @@ def parse_flake8_output(output):
     return {
         'output': lines,
         'summary': {
-            'total_errors': len(lines) - 2
+            'total_errors': max(0, len(lines) - 2)
         }
     }
 
@@ -45,6 +45,28 @@ def parse_coverage_output(output):
             'total_statements': int(total_statements),
             'total_missing': int(total_missing),
             'coverage_percent': int(coverage_percent[:-1])
+        }
+    }
+
+
+def parse_pytest_output(output):
+    """Retruns summary and detailed test report from pytest stdout"""
+    lines = output.split('\n')
+    summary_line = lines[-2].split()
+    # example fail summary_line: =========== 4 failed, 38 passed in 0.10 seconds =============
+    # example success summary_line: ========= 21 passed in 0.05 seconds =========
+    if summary_line[2].lower() == 'passed':
+        passed_tests = int(summary_line[1])
+        failed_tests = 0
+    else:
+        passed_tests = int(summary_line[3])
+        failed_tests = int(summary_line[1])
+
+    return {
+        'output': lines,
+        'summary': {
+            'passed_tests': passed_tests,
+            'failed_tests': failed_tests
         }
     }
 

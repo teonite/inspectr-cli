@@ -1,5 +1,6 @@
 import subprocess
 
+from inspectr.parsers import parse_pytest_output
 from .parsers import parse_flake8_output, parse_eslint_output, parse_unittest_output, parse_coverage_output, parse_karma_output, parse_karma_coverage_output
 
 
@@ -38,9 +39,36 @@ def coverage_django_test_reporter(config, previous_reports):
     )
     out, err = process.communicate()
     # FIXME: error handling
-    unittest_result = parse_unittest_output(err.decode('utf-8'))
+    unittest_result = parse_unittest_output(err.decode('utf-8'))  # unittest pushes output to stderr
 
     return unittest_result
+
+
+def pytest_reporter(config, previous_reports):
+    """
+    Generates unittest report object (dictionary) for given modules.
+    """
+    process = subprocess.Popen(['py.test'] + config['test_paths'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = process.communicate()
+    # FIXME: error handling
+    pytest_result = parse_pytest_output(out.decode('utf-8'))
+    return pytest_result
+
+
+def coverage_pytest_reporter(config, previous_reports):
+    """
+    Generates unittest report object (dictionary). Runs through coverage.py so that
+    subsequent coverage reporter can gather data. Requires coverage in path (coverage.py).
+    """
+    process = subprocess.Popen([
+        'coverage', 'run',
+        '-m', 'py.test'] + config['test_paths'],  # FIXME: coverage can't see py.test for some reason...
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    out, err = process.communicate()
+    # FIXME: error handling
+    pytest_result = parse_pytest_output(out.decode('utf-8'))
+    return pytest_result
 
 
 def coverage_py_reporter(config, previous_reports):
