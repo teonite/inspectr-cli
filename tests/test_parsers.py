@@ -1,4 +1,4 @@
-from .mocks import flake8_output, unittest_output, coverage_output, eslint_output, karma_output, karma_summary_fail_line, karma_summary_success_line, karma_coverage_summary_line, coverage_output_small
+from .fixtures import flake8_output, unittest_output, coverage_output, eslint_output, karma_output, karma_summary_fail_line, karma_summary_success_line, karma_coverage_summary_line, coverage_output_small
 from inspectr.parsers import parse_flake8_output, parse_unittest_output, parse_coverage_output, parse_eslint_output, parse_karma_output, extract_karma_coverage_summary, extract_karma_summary, parse_karma_coverage_output
 
 

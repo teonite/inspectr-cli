@@ -18,6 +18,7 @@ setup(name='inspectr',
       setup_requires=['pytest-runner'],
       tests_require=[
           'pytest==2.9.2',
-          'pytest-mock==1.1'
+          'pytest-mock==1.1',
+          'pyrsistent==0.11.13'
       ],
       zip_safe=False)

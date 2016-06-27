@@ -1,5 +1,211 @@
+from pyrsistent import freeze, thaw
 import rethinkdb as r
+import pytest
 from inspectr.utils import init_db, save_report, validate_and_parse_config
+
+
+minimal_valid_config = freeze({
+    "project_name": "Project",
+
+    "rethinkdb_host": "localhost",
+    "rethinkdb_port": 28015,
+    "rethinkdb_db": "inspectr",
+
+    "reporters": []
+})
+
+# valid reporter configs
+flake8_cfg = freeze({
+    'type': 'flake8',
+    'lint_paths': ['/dev/null']
+})
+
+django_test_cfg = freeze({
+    "type": "django-test",
+    "manage_path": "tools/manage.py",
+    "test_modules": ["apps.core"]
+})
+
+coverage_django_test_cfg = freeze({
+    "type": "coverage-django-test",
+    "manage_path": "tools/manage.py",
+    "test_modules": ["apps.core"]
+})
+
+coverage_py_cfg = freeze({
+    'type': 'coverage-py'
+})
+
+eslint_cfg = freeze({
+    "type": "eslint",
+    "lint_paths": [
+        "src/ng-app/project-app"
+    ]
+})
+
+karma_cfg = freeze({
+    "type": "karma",
+    'karma_config': 'karma.conf.js'
+})
+
+karma_coverage_cfg = freeze({
+    "type": "karma-coverage"
+})
+
+
+def test_validate_minimal_config():
+    parsed = validate_and_parse_config(minimal_valid_config)
+    assert bool(parsed)
+    assert parsed == minimal_valid_config
+
+
+def test_validate_minimal_config_fail():
+    for key in ['project_name', 'rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', 'reporters']:
+        config = minimal_valid_config.remove(key)
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_flake8_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(flake8_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_flake8_config_fail():
+    for key in ['type', 'lint_paths']:
+        invalid_reporter = flake8_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_django_test_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(django_test_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_django_test_config_fail():
+    for key in ['type']:
+        invalid_reporter = django_test_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_django_test_config_defaults():
+    tested_cfg = django_test_cfg
+    for key in ['manage_path', 'test_modules']:
+        missing_key_reporter = tested_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(missing_key_reporter))
+        parsed = validate_and_parse_config(thaw(config))
+
+        assert parsed['reporters'][0].get(key) is not None
+
+
+def test_coverage_django_test_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(coverage_django_test_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_coverage_django_test_config_fail():
+    for key in ['type']:
+        invalid_reporter = coverage_django_test_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_coverage_django_test_config_defaults():
+    tested_cfg = coverage_django_test_cfg
+    for key in ['manage_path', 'test_modules']:
+        missing_key_reporter = tested_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(missing_key_reporter))
+        parsed = validate_and_parse_config(thaw(config))
+
+        assert parsed['reporters'][0].get(key) is not None
+
+
+def test_coverage_py_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(coverage_py_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_coverage_py_config_fail():
+    for key in ['type']:
+        invalid_reporter = coverage_py_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_eslint_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(eslint_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_eslint_config_fail():
+    for key in ['type', 'lint_paths']:
+        invalid_reporter = eslint_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_karma_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(karma_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_karma_config_fail():
+    for key in ['type']:
+        invalid_reporter = karma_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
+
+
+def test_karma_config_defaults():
+    tested_cfg = karma_cfg
+    for key in ['karma_config']:
+        missing_key_reporter = tested_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(missing_key_reporter))
+        parsed = validate_and_parse_config(thaw(config))
+
+        assert parsed['reporters'][0].get(key) is not None
+
+
+def test_karma_coverage_config_success():
+    config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(karma_coverage_cfg))
+
+    parsed = validate_and_parse_config(thaw(config))
+    assert bool(parsed)
+    assert parsed == config
+
+
+def test_karma_coverage_config_fail():
+    for key in ['type']:
+        invalid_reporter = karma_coverage_cfg.remove(key)
+        config = minimal_valid_config.transform(['reporters'], lambda reporters: reporters.append(invalid_reporter))
+        with pytest.raises(SystemExit):
+            validate_and_parse_config(thaw(config))
 
 
 def test_init_db(monkeypatch, mocker):
@@ -14,21 +220,6 @@ def test_init_db(monkeypatch, mocker):
 
     db_create_stub.assert_called_once_with('fake_db')
     db_stub.assert_called_with('fake_db')
-
-
-def test_validate_and_parse_config():
-    config_dict = {
-        "project_name": "test_project",
-
-        "rethinkdb_host": "localhost",
-        "rethinkdb_port": 28015,
-        "rethinkdb_db": "inspectr",
-
-        "reporters": []
-    }
-
-    config = validate_and_parse_config(config_dict)
-    assert config
 
 
 def test_save_report(monkeypatch, mocker):

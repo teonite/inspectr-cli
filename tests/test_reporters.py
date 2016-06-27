@@ -1,6 +1,6 @@
 import subprocess
 
-from .mocks import flake8_output, unittest_output, coverage_output, eslint_output, karma_output
+from .fixtures import flake8_output, unittest_output, coverage_output, eslint_output, karma_output
 from inspectr.reporters import (django_test_reporter, flake8_reporter, eslint_reporter, karma_reporter,
                                 karma_coverage_reporter, coverage_django_test_reporter, coverage_py_reporter)
 
