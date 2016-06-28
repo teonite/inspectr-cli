@@ -26,7 +26,7 @@ def parse_unittest_output(stdout, stderr):
         # example fail status line: u'FAILED (failures=17)'
         failed_tests = 0 if status_line.startswith('OK') else int(status_line.split('=')[1][:-1])
     except:
-        print('Warning: Parsing unittest output failed')
+        print('Warning: Parsing unittest output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -50,7 +50,7 @@ def parse_coverage_output(stdout, stderr):
         summary_line = ' '.join(lines[-2].split())  # remove duplicate spaces
         total_statements, total_missing, coverage_percent = summary_line.split()[1:]
     except:
-        print('Warning: Parsing coverage.py output failed')
+        print('Warning: Parsing coverage.py output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -82,7 +82,7 @@ def parse_pytest_output(stdout, stderr):
             passed_tests = int(summary_line[3])
             failed_tests = int(summary_line[1])
     except:
-        print('Warning: Parsing py.test output failed')
+        print('Warning: Parsing py.test output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -108,7 +108,7 @@ def parse_eslint_output(stdout, stderr):
         # example summary line: u'✖ 1767 problems (120 errors, 1647 warnings)'
         total_problems, total_errors, total_warnings = int(summary_line[1]), int(summary_line[3][1:]), int(summary_line[5])
     except:
-        print('Warning: Parsing ESLint output failed')
+        print('Warning: Parsing ESLint output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -176,7 +176,7 @@ def parse_karma_output(stdout, stderr):
         for line in summary_lines:
             karma_summary = extract_karma_summary(line)
     except:
-        print('Warning: Parsing karma output failed')
+        print('Warning: Parsing karma output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -201,7 +201,7 @@ def parse_karma_coverage_output(stdout, stderr):
         for line in summary_lines:
             coverage_summary = extract_karma_coverage_summary(line)
     except:
-        print('Warning: Parsing karma-coverage output failed')
+        print('Warning: Parsing karma-coverage output failed: %s' % '\n'.join([stdout, stderr]))
         return {
             'stdout': stdout,
             'stderr': stderr,
