@@ -1,7 +1,6 @@
 from collections import defaultdict
 from copy import deepcopy
 import sys
-from distutils.spawn import find_executable
 import rethinkdb as r
 
 reports_table = 'reports'
@@ -56,49 +55,6 @@ def validate_and_parse_config(config_in):
         # add default config values where needed
         for key, value in default_settings.get(reporter['type'], {}).items():
             reporter[key] = reporter.get(key, value)
-
-        # reporter-specific validation
-        if reporter['type'] == 'flake8':
-            # check if flake8 is installed
-            if find_executable('flake8') is None:
-                print('Error: flake8 not installed.')
-                sys.exit(1)
-
-        if reporter['type'] == 'coverage-django-test':
-            # check if coverage.py is installed
-            if find_executable('coverage') is None:
-                print('Error: coverage.py not installed.')
-                sys.exit(1)
-
-        if reporter['type'] == 'coverage-py':
-            # check if coverage.py is installed
-            if find_executable('coverage') is None:
-                print('Error: coverage.py not installed.')
-                sys.exit(1)
-
-        if reporter['type'] == 'eslint':
-            # check if eslint installed
-            if find_executable('eslint') is None:
-                print('Error: eslint not installed.')
-                sys.exit(1)
-
-        if reporter['type'] == 'pytest' or reporter['type'] == 'coverage-pytest':
-            # check if pytest installed
-            if find_executable('py.test') is None:
-                print('Error: py.test not installed.')
-                sys.exit(1)
-
-            # check if coverage installed
-            if find_executable('coverage') is None:
-                print('Error: coverage.py not installed.')
-                sys.exit(1)
-
-
-        if reporter['type'] == 'karma' or reporter['type'] == 'karma-coverage':
-            # check if karma installed
-            if find_executable('eslint') is None:
-                print('Error: karma not installed.')
-                sys.exit(1)
 
     return config
 
