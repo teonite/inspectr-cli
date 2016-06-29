@@ -1,17 +1,18 @@
 from pyrsistent import freeze, thaw
 import rethinkdb as r
 import pytest
-from inspectr.utils import init_db, save_report, validate_and_parse_config
+from inspectr.utils import init_db, save_report, validate_and_parse_config, validate_connector_config
 
 
 minimal_valid_config = freeze({
     "project_name": "Project",
+    "reporters": []
+})
 
+minimal_valid_connector_config = freeze({
     "rethinkdb_host": "localhost",
     "rethinkdb_port": 28015,
-    "rethinkdb_db": "inspectr",
-
-    "reporters": []
+    "rethinkdb_db": "inspectr"
 })
 
 # valid reporter configs
@@ -60,10 +61,23 @@ def test_validate_minimal_config():
 
 
 def test_validate_minimal_config_fail():
-    for key in ['project_name', 'rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', 'reporters']:
+    for key in ['project_name', 'reporters']:
         config = minimal_valid_config.remove(key)
         with pytest.raises(SystemExit):
             validate_and_parse_config(thaw(config))
+
+
+def test_validate_minimal_connector_config():
+    parsed = validate_connector_config(minimal_valid_connector_config)
+    assert bool(parsed)
+    assert parsed == minimal_valid_connector_config
+
+
+def test_validate_minimal_connector_config_fail():
+    for key in ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']:
+        config = minimal_valid_connector_config.remove(key)
+        with pytest.raises(SystemExit):
+            validate_connector_config(thaw(config))
 
 
 def test_flake8_config_success():

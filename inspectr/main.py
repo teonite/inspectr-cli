@@ -1,5 +1,6 @@
 from json import loads
 import sys
+from os.path import expanduser
 
 from .reporters import (flake8_reporter, django_test_reporter, coverage_django_test_reporter, eslint_reporter, karma_reporter,
                         karma_coverage_reporter, pytest_reporter, coverage_pytest_reporter, coverage_py_reporter)
@@ -28,8 +29,9 @@ def get_datetime():
 
 
 def run():
-    # FIXME: config location as command line param
+    # TODO: config locations as command line param?
     config_path = 'inspectr.json'
+    connector_config_path = expanduser('~') + '/.inspectr_connector.json'
     try:
         with open(config_path, 'r') as config_file:
             # load config file
@@ -37,6 +39,15 @@ def run():
     except:
         print('Error: parsing configuration file %s failed' % config_path)
         sys.exit(1)
+
+    try:
+        with open(connector_config_path, 'r') as config_file:
+            # load config file
+            connector_config_dict = loads(config_file.read())
+    except:
+        print('Error: parsing connector configuration file %s failed' % connector_config_path)
+        sys.exit(1)
+    config_dict.update(connector_config_dict)
 
     config = validate_and_parse_config(config_dict)
 

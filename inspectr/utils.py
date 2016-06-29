@@ -3,10 +3,11 @@ from copy import deepcopy
 import sys
 import rethinkdb as r
 
-reports_table = 'reports'
+reports_table = 'reports_226a48d32d49'
 reports_history_table = 'reports_history'
 
-common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']
+common_required_settings = ['project_name', 'reporters']
+required_connector_settings = ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']
 
 reporter_required_settings = defaultdict(list)
 reporter_required_settings.update({
@@ -55,6 +56,16 @@ def validate_and_parse_config(config_in):
         # add default config values where needed
         for key, value in default_settings.get(reporter['type'], {}).items():
             reporter[key] = reporter.get(key, value)
+
+    return config
+
+
+def validate_connector_config(config_in):
+    config = deepcopy(config_in)
+    # check if all required configuration options are present in config file
+    if None in [config.get(key) for key in required_connector_settings]:
+        print('Error: Incomplete connector configuration (required settings: %s)' % required_connector_settings)
+        sys.exit(1)
 
     return config
 
