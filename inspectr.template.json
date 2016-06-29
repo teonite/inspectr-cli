@@ -1,0 +1,47 @@
+{
+  "project_name": "My Project",
+
+  "rethinkdb_host": "localhost",
+  "rethinkdb_port": 28015,
+  "rethinkdb_db": "inspectr",
+
+  "reporters": [
+    {
+      "type": "flake8",
+      "lint_paths": ["apps/"]
+    },
+    {
+      "type": "django-test",
+      "manage_path": "manage.py",
+      "test_modules": ["apps.core"]
+    },
+    {
+      "type": "coverage-django-test",
+      "manage_path": "manage.py",
+      "test_modules": ["myapp"]
+    },
+    {
+      "type": "coverage-py"
+    },
+    {
+      "type": "coverage-pytest",
+      "test_paths": ["apps/"]
+    },
+    {
+      "type": "pytest",
+      "test_paths": ["apps/"]
+    },
+    {
+      "type": "eslint",
+      "lint_paths": [
+        "src/"
+      ]
+    },
+    {
+      "type": "karma"
+    },
+    {
+      "type": "karma-coverage"
+    }
+  ]
+}
