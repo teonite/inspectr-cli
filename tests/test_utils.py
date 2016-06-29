@@ -12,7 +12,11 @@ minimal_valid_config = freeze({
 minimal_valid_connector_config = freeze({
     "rethinkdb_host": "localhost",
     "rethinkdb_port": 28015,
-    "rethinkdb_db": "inspectr"
+    "rethinkdb_db": "inspectr",
+
+    # https://github.com/rethinkdb/horizon/issues/498
+    "reports_table": "reports_1234",
+    "reports_history_table": "reports_history_4321"
 })
 
 # valid reporter configs
@@ -74,7 +78,7 @@ def test_validate_minimal_connector_config():
 
 
 def test_validate_minimal_connector_config_fail():
-    for key in ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']:
+    for key in ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', "reports_table", "reports_history_table"]:
         config = minimal_valid_connector_config.remove(key)
         with pytest.raises(SystemExit):
             validate_connector_config(thaw(config))
@@ -230,10 +234,10 @@ def test_init_db(monkeypatch, mocker):
     monkeypatch.setattr(r, 'db_create', db_create_stub)
     monkeypatch.setattr(r, 'errors', errors_stub)
     monkeypatch.setattr(r, 'db', db_stub)
-    init_db('fake_connection', 'fake_db')
+    init_db('fake_connection', minimal_valid_connector_config)
 
-    db_create_stub.assert_called_once_with('fake_db')
-    db_stub.assert_called_with('fake_db')
+    db_create_stub.assert_called_once_with(minimal_valid_connector_config['rethinkdb_db'])
+    db_stub.assert_called_with(minimal_valid_connector_config['rethinkdb_db'])
 
 
 def test_save_report(monkeypatch, mocker):
@@ -246,8 +250,11 @@ def test_save_report(monkeypatch, mocker):
     monkeypatch.setattr(r, 'errors', errors_stub)
     monkeypatch.setattr(r, 'db', db_stub)
     monkeypatch.setattr(r, 'connect', connect_stub)
-    save_report({'project_name': 'fake_name'}, host='fake_host', port='fake_port', db='fake_db')
+    save_report({'project_name': 'fake_name'}, minimal_valid_connector_config)
 
-    db_create_stub.assert_called_once_with('fake_db')
-    db_stub.assert_called_with('fake_db')
-    connect_stub.assert_called_with('fake_host', 'fake_port')
+    db_create_stub.assert_called_once_with(minimal_valid_connector_config['rethinkdb_db'])
+    db_stub.assert_called_with(minimal_valid_connector_config['rethinkdb_db'])
+    connect_stub.assert_called_with(
+        minimal_valid_connector_config['rethinkdb_host'],
+        minimal_valid_connector_config['rethinkdb_port']
+    )

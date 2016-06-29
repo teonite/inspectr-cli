@@ -1,0 +1,7 @@
+{
+  "rethinkdb_host": "localhost",
+  "rethinkdb_port": 28015,
+  "rethinkdb_db": "inspectr",
+  "reports_table": "reports",
+  "reports_history_table": "reports_history"
+}

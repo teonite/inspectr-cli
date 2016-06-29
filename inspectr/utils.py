@@ -3,11 +3,8 @@ from copy import deepcopy
 import sys
 import rethinkdb as r
 
-reports_table = 'reports_226a48d32d49'
-reports_history_table = 'reports_history'
-
 common_required_settings = ['project_name', 'reporters']
-required_connector_settings = ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db']
+required_connector_settings = ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', 'reports_table', 'reports_history_table']
 
 reporter_required_settings = defaultdict(list)
 reporter_required_settings.update({
@@ -70,36 +67,36 @@ def validate_connector_config(config_in):
     return config
 
 
-def init_db(connection, db):
+def init_db(connection, config):
     """Creates database, tables and indices"""
     try:
-        r.db_create(db).run(connection)
+        r.db_create(config['rethinkdb_db']).run(connection)
     except r.errors.ReqlOpFailedError:
         # database already exists
         pass
 
-    for table in [reports_table, reports_history_table]:
+    for table in [config['reports_table'], config['reports_history_table']]:
         try:
-            r.db(db).table_create(table).run(connection)
+            r.db(config['rethinkdb_db']).table_create(table).run(connection)
         except r.errors.ReqlOpFailedError:
             # table already exists
             pass
 
     try:
-        r.db(db).table(reports_table).index_create('time_created').run(connection)
+        r.db(config['rethinkdb_db']).table(config['reports_table']).index_create('time_created').run(connection)
     except r.errors.ReqlOpFailedError:
         # index already exists
         pass
 
 
-def save_report(report, host='localhost', port=28015, db='inspectr'):
+def save_report(report, config):
     """Saves report to rethinkdb"""
-    connection = r.connect(host, port)
-    init_db(connection, db)
+    connection = r.connect(config['rethinkdb_host'], config['rethinkdb_port'])
+    init_db(connection, config)
 
     # delete old reports from reports table and insert new report
-    r.db(db).table(reports_table).filter({'project_name': report['project_name']}).delete().run(connection)
-    r.db(db).table(reports_table).insert(report).run(connection)
+    r.db(config['rethinkdb_db']).table(config['reports_table']).filter({'project_name': report['project_name']}).delete().run(connection)
+    r.db(config['rethinkdb_db']).table(config['reports_table']).insert(report).run(connection)
 
     # insert report to reports_history table
-    r.db(db).table(reports_history_table).insert(report).run(connection)
+    r.db(config['rethinkdb_db']).table(config['reports_history_table']).insert(report).run(connection)

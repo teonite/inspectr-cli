@@ -68,4 +68,4 @@ def run():
         'time_created': get_datetime(),
         'reports': reports
     }
-    save_report(project_report, config['rethinkdb_host'], config['rethinkdb_port'], config['rethinkdb_db'])
+    save_report(project_report, config)

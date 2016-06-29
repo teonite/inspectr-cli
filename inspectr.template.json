@@ -1,10 +1,6 @@
 {
   "project_name": "My Project",
 
-  "rethinkdb_host": "localhost",
-  "rethinkdb_port": 28015,
-  "rethinkdb_db": "inspectr",
-
   "reporters": [
     {
       "type": "flake8",
