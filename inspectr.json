@@ -1,0 +1,15 @@
+{
+  "project_name": "Inspectr CLI",
+  "reporters": [
+    {
+      "type": "flake8",
+      "lint_paths": ["inspectr"]
+    },
+    {
+      "type": "coverage-pytest"
+    },
+    {
+      "type": "coverage-py"
+    }
+  ]
+}
