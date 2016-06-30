@@ -13,8 +13,7 @@ code quality tools. Those are the ones supported now, more under way:
 
 # Configuration
 
-Place <b>inspectr.json</b> in your project directory. Example below shows all available reporters
-use only the ones that are relevant to your project:
+Place <b>inspectr.json</b> in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
 
 <pre>
 {

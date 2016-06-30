@@ -1,0 +1,7 @@
+pip_register:
+  stage: build
+  script:
+    - inspectr
+    - python setup.py register -r teonite sdist upload -r teonite
+  tags:
+    - shell
