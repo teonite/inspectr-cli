@@ -13,8 +13,9 @@ RUN apk add --no-cache \
 ADD . /inspectr
 
 RUN cd /inspectr/docker && npm install -g
-RUN cd /inspectr && pip3 install -r requirements.pip
-RUN cd /inspectr/docker && pip3 install -r reporter-requirements.pip
+RUN pip install --upgrade pip
+RUN cd /inspectr && pip install -r requirements.pip
+RUN cd /inspectr/docker && pip install -r reporter-requirements.pip
 
 RUN cd /inspectr && python setup.py install
 
