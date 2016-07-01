@@ -1,4 +1,4 @@
-from .fixtures import (flake8_output, unittest_output, coverage_output, eslint_output, karma_output, karma_summary_fail_line,
+from .fixtures import (flake8_output, unittest_output, coverage_output, eslint_output, eslint_output_noerrors, karma_output, karma_summary_fail_line,
                        karma_summary_success_line, karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail)
 from inspectr.parsers import (parse_flake8_output, parse_unittest_output, parse_coverage_output, parse_eslint_output, parse_karma_output,
                               extract_karma_coverage_summary, extract_karma_summary, parse_karma_coverage_output, parse_pytest_output)
@@ -102,9 +102,21 @@ def test_parse_eslint_output():
     }
 
 
-def test_parse_eslint_ouput_unparsable():
-    parsed = parse_eslint_output('Unparsable string. Seriously, dont even try.', '')
+def test_parse_eslint_output_noerrors():
+    parsed = parse_eslint_output(eslint_output_noerrors, '')
     assert len(parsed['stdout'].split('\n')) == 1
+    assert len(parsed['stderr'].split('\n')) == 1
+
+    assert parsed['summary'] == {
+        'total_problems': 0,
+        'total_errors': 0,
+        'total_warnings': 0
+    }
+
+
+def test_parse_eslint_ouput_unparsable():
+    parsed = parse_eslint_output('Unparsable string.\nSeriously, dont even try.', '')
+    assert len(parsed['stdout'].split('\n')) == 2
     assert len(parsed['stderr'].split('\n')) == 1
     assert parsed['summary'] is None
 

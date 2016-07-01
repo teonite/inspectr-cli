@@ -102,6 +102,17 @@ def parse_pytest_output(stdout, stderr):
 def parse_eslint_output(stdout, stderr):
     """Returns summary and list of errors from eslint stdout"""
     lines = stdout.split('\n')
+    if len(lines) == 1:
+        # no output, no errors
+        return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': {
+            'total_problems': 0,
+            'total_errors': 0,
+            'total_warnings': 0
+        }
+    }
     try:
         summary_line = lines[-3].split()
 

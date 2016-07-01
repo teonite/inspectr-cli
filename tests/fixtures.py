@@ -58,6 +58,9 @@ eslint_output = dedent("""\
 
     """)
 
+eslint_output_noerrors = dedent("""\
+    """)
+
 karma_output = dedent("""\
     26 06 2016 12:12:55.610:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/node_modules/sinon/pkg/sinon-timers.js" does not match any file.
     26 06 2016 12:12:55.618:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/dist/lib/angularjs/angular-locale_en-gb.js" does not match any file.
