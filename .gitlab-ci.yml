@@ -16,6 +16,6 @@ build_docker:
     - docker build -t tcn.re/inspectr/inspectr .
     - docker push tcn.re/inspectr/inspectr
     - docker run -v $(pwd):/code -v /home/gitlab-runner/inspectr_connector_docker.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr
-    - docker run -v $(pwd):/code tcn.re/inspectr/inspectr find /code -user root -exec rm -rf "{}" ';'  # cleanup
+    - docker run -v $(pwd):/code tcn.re/inspectr/inspectr find /code -user root -exec rm -rf "{}" ';' || true  # cleanup
   tags:
    - shell
