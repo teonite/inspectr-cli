@@ -1,5 +1,5 @@
 pip_register:
-  stage: build
+  stage: deploy
   script:
     - python setup.py register -r teonite sdist upload -r teonite
   tags:
@@ -13,3 +13,8 @@ build_docker:
     - docker run -v $(pwd):/code -v /home/gitlab-runner/inspectr_connector_docker.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr
   tags:
     - shell
+
+cleanup:
+  stage: cleanup
+  script:
+   - rm -rf build/ dist/ inspectr.egg-info/ .coverage/
