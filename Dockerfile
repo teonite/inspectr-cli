@@ -1,23 +1,24 @@
-FROM mhart/alpine-node:6
+FROM node:6
 MAINTAINER Jacek Chmielewski "jchmielewski@teonite.com"
 
-RUN apk update && apk add --no-cache \
+# https://github.com/npm/npm/issues/9863
+RUN cd $(npm root -g)/npm \
+ && npm install fs-extra \
+ && sed -i -e s/graceful-fs/fs-extra/ -e s/fs\.rename/fs.move/ ./lib/utils/rename.js
+
+RUN apt-get update && apt-get install --assume-yes \
     python3 \
-    python3-dev\
-    build-base && \
-    python3 -m ensurepip && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
-    ln -s /usr/bin/pip3 /usr/bin/pip && \
-    rm -rf /usr/lib/python*/ensurepip
+    python3-pip
+
+RUN pip3 install --upgrade setuptools
 
 ADD . /inspectr
 
 RUN cd /inspectr/docker && npm install -g
-RUN pip install --upgrade pip
-RUN cd /inspectr && pip install -r requirements.pip
-RUN cd /inspectr/docker && pip install -r reporter-requirements.pip
+RUN cd /inspectr && pip3 install -r requirements.pip
+RUN cd /inspectr/docker && pip3 install -r reporter-requirements.pip
 
-RUN cd /inspectr && python setup.py install
+RUN cd /inspectr && python3 setup.py install
 
 VOLUME /code /root/.inspectr_connector.json
 
