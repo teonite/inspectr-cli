@@ -1,8 +1,3 @@
-stages:
- - build
- - cleanup
- - deploy
-
 pip_register:
   stage: deploy
   script:
