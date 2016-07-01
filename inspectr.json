@@ -3,13 +3,15 @@
   "reporters": [
     {
       "type": "flake8",
-      "lint_paths": ["inspectr"]
+      "command": "flake8 inspectr"
     },
     {
-      "type": "coverage-pytest"
+      "type": "pytest",
+      "command": "coverage run -m py.test"
     },
     {
-      "type": "coverage-py"
+      "type": "coverage-py",
+      "command": "coverage report"
     }
   ]
 }

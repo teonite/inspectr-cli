@@ -1,36 +1,13 @@
-from collections import defaultdict
 from copy import deepcopy
 import sys
 import rethinkdb as r
+from colorama import Style
+
 
 common_required_settings = ['project_name', 'reporters']
 required_connector_settings = ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', 'reports_table', 'reports_history_table']
 
-reporter_required_settings = defaultdict(list)
-reporter_required_settings.update({
-    'flake8': ['lint_paths'],
-    'eslint': ['lint_paths'],
-})
-
-default_settings = {
-    'django-test': {
-        'manage_path': 'manage.py',
-        'test_modules': []
-    },
-    'coverage-django-test': {
-        'manage_path': 'manage.py',
-        'test_modules': []
-    },
-    'karma': {
-        'karma_config': 'karma.conf.js'
-    },
-    'pytest': {
-        'test_paths': []
-    },
-    'coverage-pytest': {
-        'test_paths': []
-    }
-}
+required_reporter_settings = ['type', 'command']
 
 
 def validate_and_parse_config(config_in):
@@ -41,18 +18,9 @@ def validate_and_parse_config(config_in):
         sys.exit(1)
 
     for reporter in config['reporters']:
-        if not reporter.get('type'):
-            print('Error: Found reporter with undefined type.')
+        if False in [key in reporter for key in required_reporter_settings]:
+            print('Error: Invalid reporter configuration:\n%s\n\nRequired settings: %s' % (reporter, required_reporter_settings))
             sys.exit(1)
-
-        required_settings = reporter_required_settings[reporter['type']]
-        if None in [reporter.get(key) for key in required_settings]:
-            print('Error: Incomplete configuration for reporter %s, required settings: %s' % (reporter['type'], required_settings))
-            sys.exit(1)
-
-        # add default config values where needed
-        for key, value in default_settings.get(reporter['type'], {}).items():
-            reporter[key] = reporter.get(key, value)
 
     return config
 
@@ -100,3 +68,7 @@ def save_report(report, config):
 
     # insert report to reports_history table
     r.db(config['rethinkdb_db']).table(config['reports_history_table']).insert(report).run(connection)
+
+
+def cprint(message, color=Style.RESET_ALL):
+    print("{}{}{}".format(color, message, Style.RESET_ALL))

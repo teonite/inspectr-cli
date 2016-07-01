@@ -2,24 +2,24 @@ from json import loads
 import sys
 from os.path import expanduser
 
-from .reporters import (flake8_reporter, django_test_reporter, coverage_django_test_reporter, eslint_reporter, karma_reporter,
-                        karma_coverage_reporter, pytest_reporter, coverage_pytest_reporter, coverage_py_reporter)
-from .utils import save_report, validate_and_parse_config
+from .executor import execute
+from .parsers import (flake8_parser, coverage_py_parser, eslint_parser, jasmine_parser, karma_coverage_parser, pytest_parser, unittest_parser)
+from .utils import save_report, validate_and_parse_config, cprint
 import time
 from datetime import datetime
+from colorama import init, Fore
 
 from pytz import timezone
 
-reporters = {
-    'flake8': flake8_reporter,
-    'django-test': django_test_reporter,
-    'coverage-django-test': coverage_django_test_reporter,
-    'eslint': eslint_reporter,
-    'karma': karma_reporter,
-    'karma-coverage': karma_coverage_reporter,
-    'pytest': pytest_reporter,
-    'coverage-pytest': coverage_pytest_reporter,
-    'coverage-py': coverage_py_reporter
+
+parsers = {
+    'flake8': flake8_parser,
+    'unittest': unittest_parser,
+    'coverage-py': coverage_py_parser,
+    'eslint': eslint_parser,
+    'jasmine': jasmine_parser,
+    'karma-coverage': karma_coverage_parser,
+    'pytest': pytest_parser,
 }
 
 
@@ -29,6 +29,7 @@ def get_datetime():
 
 
 def run():
+    init()
     # TODO: config locations as command line param?
     config_path = 'inspectr.json'
     connector_config_path = expanduser('~') + '/.inspectr_connector.json'
@@ -37,7 +38,7 @@ def run():
             # load config file
             config_dict = loads(config_file.read())
     except:
-        print('Error: parsing configuration file %s failed' % config_path)
+        cprint('Error: parsing configuration file %s failed' % config_path, Fore.RED)
         sys.exit(1)
 
     try:
@@ -45,7 +46,7 @@ def run():
             # load config file
             connector_config_dict = loads(config_file.read())
     except:
-        print('Error: parsing connector configuration file %s failed' % connector_config_path)
+        cprint('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.Red)
         sys.exit(1)
     config_dict.update(connector_config_dict)
 
@@ -55,13 +56,16 @@ def run():
     reports = []
     for reporter in config['reporters']:
         print('Executing %s reporter' % reporter['type'])
+        cprint('--> %s' % reporter['command'], Fore.GREEN)
         try:
-            report = reporters[reporter['type']](reporter, reports)
+            stdout, stderr = execute(reporter['command'])
+            parsed_report = parsers[reporter['type']](stdout, stderr, reports)
         except:
-            print('Warning: Reporter for type %s failed.' % reporter['type'])
+            cprint('Warning: Reporter %s failed. \nSTDOUT:\n%s\nSTDERR:\n%s\n' % (reporter['type'], stdout, stderr), Fore.RED)
             continue
-        report['type'] = reporter['type']
-        reports.append(report)
+
+        parsed_report['type'] = reporter['type']
+        reports.append(parsed_report)
 
     project_report = {
         'project_name': config['project_name'],
