@@ -10,6 +10,6 @@ build_docker:
   script:
     - docker build -t tcn.re/inspectr/inspectr .
     - docker push tcn.re/inspectr/inspectr
-    - docker run -v $(pwd):/code -v /home/gitlab-ci/inspectr_connector_docker.json:/root/.inspectr_connector.json tcn.re/teonite/inspectr-docker
+    - docker run -v $(pwd):/code -v /home/gitlab-ci/inspectr_connector_docker.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr
   tags:
     - shell
