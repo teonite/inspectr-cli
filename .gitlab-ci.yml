@@ -3,13 +3,12 @@ stages:
  - deploy
  - cleanup
 
-tags:
- - shell
-
 pip_register:
   stage: deploy
   script:
     - python setup.py register -r teonite sdist upload -r teonite
+  tags:
+   - shell
 
 build_docker:
   stage: build
@@ -17,8 +16,12 @@ build_docker:
     - docker build -t tcn.re/inspectr/inspectr .
     - docker push tcn.re/inspectr/inspectr
     - docker run -v $(pwd):/code -v /home/gitlab-runner/inspectr_connector_docker.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr
+  tags:
+   - shell
 
 clean:
   stage: cleanup
   script:
    - rm -rf build/ dist/ inspectr.egg-info/ .coverage/
+  tags:
+   - shell
