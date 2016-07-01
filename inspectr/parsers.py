@@ -105,14 +105,14 @@ def parse_eslint_output(stdout, stderr):
     if len(lines) == 1:
         # no output, no errors
         return {
-        'stdout': stdout,
-        'stderr': stderr,
-        'summary': {
-            'total_problems': 0,
-            'total_errors': 0,
-            'total_warnings': 0
+            'stdout': stdout,
+            'stderr': stderr,
+            'summary': {
+                'total_problems': 0,
+                'total_errors': 0,
+                'total_warnings': 0
+            }
         }
-    }
     try:
         summary_line = lines[-3].split()
 
