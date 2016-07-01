@@ -1,7 +1,7 @@
 stages:
  - build
- - deploy
  - cleanup
+ - deploy
 
 pip_register:
   stage: deploy
@@ -22,6 +22,6 @@ build_docker:
 clean:
   stage: cleanup
   script:
-   - rm -rf build/ dist/ inspectr.egg-info/ .coverage/
+   - docker run -v $(pwd):/code tcn.re/inspectr/inspectr rm -rf /code
   tags:
    - shell
