@@ -1,7 +1,7 @@
 from copy import deepcopy
 import sys
 import rethinkdb as r
-from colorama import Style
+from colorama import Style, Fore
 
 
 common_required_settings = ['project_name', 'reporters']
@@ -70,5 +70,26 @@ def save_report(report, config):
     r.db(config['rethinkdb_db']).table(config['reports_history_table']).insert(report).run(connection)
 
 
-def cprint(message, color=Style.RESET_ALL):
-    print("{}{}{}".format(color, message, Style.RESET_ALL))
+def colored(message, color=Style.RESET_ALL):
+    return "{}{}{}".format(color, message, Style.RESET_ALL)
+
+
+def print_command(reporter):
+    sys.stdout.write(
+        '[....] %s (%s)\r' % (reporter['command'] or '', colored(reporter['type'], Fore.BLUE))
+    )
+    sys.stdout.flush()
+
+
+def print_command_ok(reporter):
+    sys.stdout.write(
+        colored('%s[ %sOK %s]%s\n' % (Fore.WHITE, Fore.GREEN, Fore.WHITE, Fore.RESET))
+    )
+    sys.stdout.flush()
+
+
+def print_command_fail(reporter):
+    sys.stdout.write(
+        colored('%s[%sFAIL%s]%s\n' % (Fore.WHITE, Fore.RED, Fore.WHITE, Fore.RESET))
+    )
+    sys.stdout.flush()

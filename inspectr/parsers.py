@@ -168,7 +168,7 @@ def jasmine_parser(stdout, stderr, previous_reports=None):
 
 def karma_coverage_parser(stdout, stderr, previous_reports=None):
     """Returns test coverage summary and list of errors from karma stdout"""
-    reports = [report for report in previous_reports if report['type'] in ['jasmine']]
+    reports = [report for report in previous_reports if report['type'] in ['jasmine', 'mocha']]
     for report in reports:
         lines = report['stdout'].split('\n')
 

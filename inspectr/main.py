@@ -2,10 +2,11 @@ from json import loads
 import sys
 from os.path import expanduser
 
+from inspectr.utils import print_command, print_command_fail, print_command_ok
 from .executor import execute
 from .parsers import (flake8_parser, coverage_py_parser, eslint_parser, jasmine_parser, karma_coverage_parser,
                       pytest_parser, unittest_parser, mocha_parser)
-from .utils import save_report, validate_and_parse_config, cprint
+from .utils import save_report, validate_and_parse_config, colored
 import time
 from datetime import datetime
 from colorama import init, Fore
@@ -40,7 +41,7 @@ def run():
             # load config file
             config_dict = loads(config_file.read())
     except:
-        cprint('Error: parsing configuration file %s failed' % config_path, Fore.RED)
+        print(colored('Error: parsing configuration file %s failed' % config_path, Fore.RED))
         sys.exit(1)
 
     try:
@@ -48,7 +49,7 @@ def run():
             # load config file
             connector_config_dict = loads(config_file.read())
     except:
-        cprint('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.Red)
+        print(colored('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.Red))
         sys.exit(1)
     config_dict.update(connector_config_dict)
 
@@ -57,18 +58,20 @@ def run():
     # generate report for each reporter in config['reporters'] list
     reports = []
     for reporter in config['reporters']:
-        print('Executing %s reporter' % reporter['type'])
-        cprint('--> %s' % reporter['command'], Fore.GREEN)
+        print_command(reporter)
         try:
             stdout, stderr = execute(reporter['command'])
             parsed_report = parsers[reporter['type']](stdout, stderr, reports)
         except:
-            cprint('Error: Reporter %s failed. \nSTDOUT:\n%s\nSTDERR:\n%s\n' % (reporter['type'], stdout, stderr), Fore.RED)
+            print_command_fail(reporter)
+            print(colored('Error: Reporter %s failed. \nSTDOUT:\n%s\nSTDERR:\n%s\n' % (reporter['type'], stdout, stderr), Fore.RED))
             parsed_report = {
                 'stdout': stdout,
                 'stderr': stderr,
                 'summary': None
             }
+        else:
+            print_command_ok(reporter)
 
         parsed_report['type'] = reporter['type']
         reports.append(parsed_report)
