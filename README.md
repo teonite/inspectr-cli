@@ -9,6 +9,7 @@ code quality tools. Those are the ones supported now, more under way:
 * coverage.py reports
 * eslint javascript linter
 * jasmine tests
+* mocha tests
 * karma-coverage reports
 
 # Configuration
@@ -42,6 +43,10 @@ Place <b>inspectr.json</b> in your project directory. Example below shows all av
     },
     {
     	"type": "jasmine",
+	    "command": "karma start karma.conf.js --single-run"
+    },
+    {
+    	"type": "mocha",
 	    "command": "karma start karma.conf.js --single-run"
     },
     {

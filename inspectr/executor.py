@@ -1,4 +1,11 @@
 import subprocess
+import re
+
+
+def clean(console_output):
+    """Removes ANSI escape sequences from given console ouput"""
+    ansi_escape = re.compile(r'\x1b[^m]*m')
+    return ansi_escape.sub('', console_output)
 
 
 def decode(binary_strings):
@@ -7,7 +14,7 @@ def decode(binary_strings):
         if isinstance(bs, str):  # sometimes we get regular strings here
             result.append(bs)
             continue
-        result.append(bs.decode('utf-8'))
+        result.append(clean(bs.decode('utf-8')))
 
     return result
 

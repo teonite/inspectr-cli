@@ -68,7 +68,8 @@ eslint_output_custom = dedent("""\
 
 """)
 
-karma_output = dedent("""\
+
+jasmine_output = dedent("""\
     26 06 2016 12:12:55.610:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/node_modules/sinon/pkg/sinon-timers.js" does not match any file.
     26 06 2016 12:12:55.618:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/dist/lib/angularjs/angular-locale_en-gb.js" does not match any file.
     26 06 2016 12:12:56.434:INFO [karma]: Karma v1.0.0 server started at http://localhost:9876/
@@ -92,9 +93,47 @@ karma_output = dedent("""\
 
     """)
 
+
+mocha_success_output = dedent("""\
+    02 07 2016 09:19:45.773:INFO [PhantomJS 2.1.1 (Linux 0.0.0)]: Connected on socket /#VePfZy9E04WvElXUAAAA with id 13721294
+      selectLocationState
+        ✔ should select the route as a plain JS object
+      hooks
+        getHooks
+          ✔ given a store, should return all hooks
+        helpers
+          injectAsyncReducer
+            ✔ given a store, it should provide a function to inject a reducer
+          injectAsyncSagas
+            ✔ given a store, it should provide a function to inject a saga
+
+    =============================== Coverage summary ===============================
+    Statements   : 85.31% ( 604/708 ), 54 ignored
+    Branches     : 88.66% ( 258/291 ), 94 ignored
+    Functions    : 73.86% ( 113/153 ), 22 ignored
+    Lines        : 77.25% ( 258/334 )
+    ================================================================================
+
+    Finished in 0.08 secs / 0.034 secs
+
+    SUMMARY:
+    ✔ 4 tests completed
+
+    """)
+
+
+mocha_fail_output = dedent("""\
+    Finished in 0.095 secs / 0.039 secs
+
+    SUMMARY:
+    ✔ 3 tests completed
+    ✖ 1 test failed
+
+    """)
+
 karma_coverage_summary_line = "All files          |     4.82 |     0.43 |     0.78 |     4.91 |                |"
-karma_summary_success_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 SUCCESS (0.205 secs / 0.001 secs)"
-karma_summary_fail_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 (1 FAILED) ERROR (0.21 secs / 0.001 secs)"
+jasmine_summary_success_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 SUCCESS (0.205 secs / 0.001 secs)"
+jasmine_summary_fail_line = "PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 (1 FAILED) ERROR (0.21 secs / 0.001 secs)"
 
 pytest_output_fail = dedent("""\
     __________________________________________________________________________________________ test_coverage_pytest_reporter ___________________________________________________________________________________________

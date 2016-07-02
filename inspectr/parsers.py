@@ -147,22 +147,22 @@ def extract_karma_coverage_summary(line):
 
 
 def jasmine_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from karma stdout"""
+    """Returns summary and list of errors from jasmine stdout"""
     lines = stdout.split('\n')
-    karma_summary_regex = r'\(.+\): Executed \d+ of \d+ (SUCCESS|\(\d+ FAILED\)( ERROR)?) \(.+ secs / .+ secs\)'
+    jasmine_summary_regex = r'\(.+\): Executed \d+ of \d+ (SUCCESS|\(\d+ FAILED\)( ERROR)?) \(.+ secs / .+ secs\)'
 
-    karma_summary = None
-    summary_lines = [line for line in lines if re.search(karma_summary_regex, line)]
+    jasmine_summary = None
+    summary_lines = [line for line in lines if re.search(jasmine_summary_regex, line)]
     for line in summary_lines:
-        karma_summary = extract_jasmine_summary(line)
+        jasmine_summary = extract_jasmine_summary(line)
 
-    if karma_summary is None:
+    if jasmine_summary is None:
         raise ValueError('Karma summary line not found in input: %s' % stdout)
 
     return {
         'stdout': stdout,
         'stderr': stderr,
-        'summary': karma_summary
+        'summary': jasmine_summary
     }
 
 
@@ -186,4 +186,44 @@ def karma_coverage_parser(stdout, stderr, previous_reports=None):
         'stdout': stdout,
         'stderr': stderr,
         'summary': coverage_summary
+    }
+
+
+def extract_mocha_summary(lines):
+    """
+    Example SUCCESS mocha summary lines (both lines can be missing if no tests passed/failed):
+    ✔ 3 tests completed
+    ✖ 1 test failed
+    """
+    passes, fails = 0, 0
+    for line in lines:
+        if line and line[0] == '✔':
+            passes = int(line.split()[1])
+        elif line and line[0] == '✖':
+            fails = int(line.split()[1])
+
+    return {
+        'total_tests': passes + fails,
+        'passed_tests': passes,
+        'failed_tests': fails
+    }
+
+
+def mocha_parser(stdout, stderr, previous_reports=None):
+    """Returns summary and list of errors from mocha stdout"""
+    lines = stdout.split('\n')
+    mocha_summary_start_regex = r'^SUMMARY:$'
+
+    mocha_summary = None
+    summary_lines = [index for index, line in enumerate(lines) if re.search(mocha_summary_start_regex, line)]
+    for line_index in summary_lines:
+        mocha_summary = extract_mocha_summary(lines[line_index+1:line_index+3])
+
+    if mocha_summary is None:
+        raise ValueError('Karma summary line not found in input: %s' % stdout)
+
+    return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': mocha_summary
     }

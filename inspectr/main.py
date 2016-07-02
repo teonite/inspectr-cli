@@ -3,7 +3,8 @@ import sys
 from os.path import expanduser
 
 from .executor import execute
-from .parsers import (flake8_parser, coverage_py_parser, eslint_parser, jasmine_parser, karma_coverage_parser, pytest_parser, unittest_parser)
+from .parsers import (flake8_parser, coverage_py_parser, eslint_parser, jasmine_parser, karma_coverage_parser,
+                      pytest_parser, unittest_parser, mocha_parser)
 from .utils import save_report, validate_and_parse_config, cprint
 import time
 from datetime import datetime
@@ -18,6 +19,7 @@ parsers = {
     'coverage-py': coverage_py_parser,
     'eslint': eslint_parser,
     'jasmine': jasmine_parser,
+    'mocha': mocha_parser,
     'karma-coverage': karma_coverage_parser,
     'pytest': pytest_parser,
 }

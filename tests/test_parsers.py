@@ -1,10 +1,10 @@
 import pytest
 
-from tests.fixtures import eslint_output_custom
-from .fixtures import (flake8_output, unittest_output, coverage_output, eslint_output, eslint_output_noerrors, karma_output, karma_summary_fail_line,
-                       karma_summary_success_line, karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail)
+from .fixtures import (flake8_output, unittest_output, eslint_output_custom, mocha_success_output, mocha_fail_output, coverage_output,
+                       eslint_output, eslint_output_noerrors, jasmine_output, jasmine_summary_fail_line, jasmine_summary_success_line,
+                       karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail)
 from inspectr.parsers import (flake8_parser, unittest_parser, coverage_py_parser, eslint_parser, jasmine_parser,
-                              extract_karma_coverage_summary, extract_jasmine_summary, karma_coverage_parser, pytest_parser)
+                              extract_karma_coverage_summary, extract_jasmine_summary, karma_coverage_parser, pytest_parser, mocha_parser)
 
 
 def test_parse_flake8_output():
@@ -129,7 +129,7 @@ def test_parse_eslint_ouput_unparsable():
 
 
 def test_parse_karma_output():
-    parsed = jasmine_parser(karma_output, '')
+    parsed = jasmine_parser(jasmine_output, '')
     assert len(parsed['stdout'].split('\n')) == 22
     assert len(parsed['stderr'].split('\n')) == 1
 
@@ -146,7 +146,7 @@ def test_parse_jasmine_ouput_unparsable():
 
 
 def test_parse_karma_coverage_output():
-    parsed = karma_coverage_parser('', '', [{'type': 'jasmine', 'stdout': karma_output}])
+    parsed = karma_coverage_parser('', '', [{'type': 'jasmine', 'stdout': jasmine_output}])
     assert len(parsed['stdout'].split('\n')) == 1
     assert len(parsed['stderr'].split('\n')) == 1
 
@@ -164,7 +164,7 @@ def test_parse_karma_coverage_ouput_unparsable():
 
 
 def test_extract_karma_summary_fail():
-    parsed = extract_jasmine_summary(karma_summary_fail_line)
+    parsed = extract_jasmine_summary(jasmine_summary_fail_line)
     assert parsed == {
         'total_tests': 1,
         'executed_tests': 1,
@@ -173,7 +173,7 @@ def test_extract_karma_summary_fail():
 
 
 def test_extract_karma_summary_success():
-    parsed = extract_jasmine_summary(karma_summary_success_line)
+    parsed = extract_jasmine_summary(jasmine_summary_success_line)
     assert parsed == {
         'total_tests': 1,
         'executed_tests': 1,
@@ -190,3 +190,32 @@ def test_extract_coverage_summary():
         'functions_percent': 0.78,
         'lines_percent': 4.91
     }
+
+
+def test_parse_mocha_output_success():
+    parsed = mocha_parser(mocha_success_output, '')
+    assert len(parsed['stdout'].split('\n')) == 25
+    assert len(parsed['stderr'].split('\n')) == 1
+
+    assert parsed['summary'] == {
+        'total_tests': 4,
+        'passed_tests': 4,
+        'failed_tests': 0
+    }
+
+
+def test_parse_mocha_output_fail():
+    parsed = mocha_parser(mocha_fail_output, '')
+    assert len(parsed['stdout'].split('\n')) == 7
+    assert len(parsed['stderr'].split('\n')) == 1
+
+    assert parsed['summary'] == {
+        'total_tests': 4,
+        'passed_tests': 3,
+        'failed_tests': 1
+    }
+
+
+def test_parse_mocha_ouput_unparsable():
+    with pytest.raises(Exception):
+        mocha_parser('Unparsable string. Seriously, dont even try.', '')
