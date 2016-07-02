@@ -61,8 +61,12 @@ def run():
             stdout, stderr = execute(reporter['command'])
             parsed_report = parsers[reporter['type']](stdout, stderr, reports)
         except:
-            cprint('Warning: Reporter %s failed. \nSTDOUT:\n%s\nSTDERR:\n%s\n' % (reporter['type'], stdout, stderr), Fore.RED)
-            continue
+            cprint('Error: Reporter %s failed. \nSTDOUT:\n%s\nSTDERR:\n%s\n' % (reporter['type'], stdout, stderr), Fore.RED)
+            parsed_report = {
+                'stdout': stdout,
+                'stderr': stderr,
+                'summary': None
+            }
 
         parsed_report['type'] = reporter['type']
         reports.append(parsed_report)
