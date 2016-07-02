@@ -14,7 +14,7 @@ setup(name='inspectr',
       install_requires=[
           "pytz==2016.4",
           "rethinkdb==2.3.0.post4",
-          "colorama=0.3.7"
+          "colorama==0.3.7"
       ],
       setup_requires=['pytest-runner'],
       tests_require=[
