@@ -4,40 +4,31 @@
   "reporters": [
     {
       "type": "flake8",
-      "lint_paths": ["apps/"]
+      "command": "flake8 apps/"
     },
     {
-      "type": "django-test",
-      "manage_path": "manage.py",
-      "test_modules": ["apps.core"]
+      "type": "unittest",
+      "command": "manage.py test"
     },
     {
-      "type": "coverage-django-test",
-      "manage_path": "manage.py",
-      "test_modules": ["myapp"]
+      "type": "coverage-py",
+      "command": "coverage report"
     },
     {
-      "type": "coverage-py"
-    },
-    {
-      "type": "coverage-pytest",
-      "test_paths": ["apps/"]
-    },
-    {
-      "type": "pytest",
-      "test_paths": ["apps/"]
+	"type": "pytest",
+	"command": "coverage run -m py.test"
     },
     {
       "type": "eslint",
-      "lint_paths": [
-        "src/"
-      ]
+	  "command": "eslint src/"
     },
     {
-      "type": "karma"
+    	"type": "jasmine",
+	    "command": "karma start karma.conf.js --single-run"
     },
     {
-      "type": "karma-coverage"
+	    "type": "karma-coverage",
+	    "command": null
     }
   ]
 }

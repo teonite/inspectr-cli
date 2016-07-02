@@ -78,8 +78,10 @@ def pytest_parser(stdout, stderr, previous_reports=None):
 def eslint_parser(stdout, stderr, previous_reports=None):
     """Returns summary and list of errors from eslint stdout"""
     lines = stdout.split('\n')
-    if len(lines) == 1:
-        # no output, no errors
+    eslint_summary_regex = r'^✖.*'
+    summary_lines = [line for line in lines if re.search(eslint_summary_regex, line)]
+    if not summary_lines:
+        # no summary, no errors
         return {
             'stdout': stdout,
             'stderr': stderr,
@@ -89,7 +91,7 @@ def eslint_parser(stdout, stderr, previous_reports=None):
                 'total_warnings': 0
             }
         }
-    summary_line = lines[-3].split()
+    summary_line = summary_lines[-1].split()
 
     # example summary line: u'✖ 1767 problems (120 errors, 1647 warnings)'
     total_problems, total_errors, total_warnings = int(summary_line[1]), int(summary_line[3][1:]), int(summary_line[5])

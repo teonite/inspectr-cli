@@ -1,4 +1,6 @@
 import pytest
+
+from tests.fixtures import eslint_output_custom
 from .fixtures import (flake8_output, unittest_output, coverage_output, eslint_output, eslint_output_noerrors, karma_output, karma_summary_fail_line,
                        karma_summary_success_line, karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail)
 from inspectr.parsers import (flake8_parser, unittest_parser, coverage_py_parser, eslint_parser, jasmine_parser,
@@ -109,9 +111,21 @@ def test_parse_eslint_output_noerrors():
     }
 
 
+def test_parse_eslint_output_custom():
+    parsed = eslint_parser(eslint_output_custom, '')
+    assert len(parsed['stdout'].split('\n')) == 5
+    assert len(parsed['stderr'].split('\n')) == 1
+
+    assert parsed['summary'] == {
+        'total_problems': 0,
+        'total_errors': 0,
+        'total_warnings': 0
+    }
+
+
 def test_parse_eslint_ouput_unparsable():
     with pytest.raises(Exception):
-        eslint_parser('Unparsable string.\nSeriously, dont even try.', '')
+        eslint_parser('✖ Unparsable string.\nSeriously, dont even try.', '')
 
 
 def test_parse_karma_output():
