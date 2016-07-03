@@ -14,7 +14,8 @@ RUN pip3 install --upgrade setuptools
 
 ADD . /inspectr
 
-RUN cd /inspectr/docker && npm install -g
+RUN cd /inspectr/docker && npm install
+ENV PATH $PATH:/inspectr/docker/node_modules/.bin/
 RUN cd /inspectr && pip3 install -r requirements.pip
 RUN cd /inspectr/docker && pip3 install -r reporter-requirements.pip
 
