@@ -3,7 +3,6 @@ import re
 
 
 def flake8_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from flake8 stdout"""
     lines = stdout.split('\n')
     return {
         'stdout': stdout,
@@ -15,16 +14,15 @@ def flake8_parser(stdout, stderr, previous_reports=None):
 
 
 def unittest_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and detailed testing results from unittest stdout"""
+    """
+    Example total_line: u'Ran 2 tests in 0.396s'
+    Example fail status line: u'FAILED (failures=17)'
+    """
     lines = stderr.split('\n')  # unittest pushes output to stderr
     total_line, status_line = lines[-4:-1:2]
 
-    # example total_line: u'Ran 2 tests in 0.396s'
     total_tests = int(total_line.split()[1])
-
-    # example fail status line: u'FAILED (failures=17)'
     failed_tests = 0 if status_line.startswith('OK') else int(status_line.split('=')[1][:-1])
-
     return {
         'stdout': stdout,
         'stderr': stderr,
@@ -36,7 +34,6 @@ def unittest_parser(stdout, stderr, previous_reports=None):
 
 
 def coverage_py_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and detailed test coverage results from coverage stdout"""
     lines = stdout.split('\n')
     summary_line = ' '.join(lines[-2].split())  # remove duplicate spaces
     total_statements, total_missing, coverage_percent = summary_line.split()[1:]
@@ -53,11 +50,13 @@ def coverage_py_parser(stdout, stderr, previous_reports=None):
 
 
 def pytest_parser(stdout, stderr, previous_reports=None):
-    """Retruns summary and detailed test report from pytest stdout"""
+    """
+    Example fail summary_line: =========== 4 failed, 38 passed in 0.10 seconds =============
+    Example success summary_line: ========= 21 passed in 0.05 seconds =========
+    """
     lines = stdout.split('\n')
     summary_line = lines[-2].split()
-    # example fail summary_line: =========== 4 failed, 38 passed in 0.10 seconds =============
-    # example success summary_line: ========= 21 passed in 0.05 seconds =========
+
     if summary_line[2].lower() == 'passed':
         passed_tests = int(summary_line[1])
         failed_tests = 0
@@ -76,7 +75,6 @@ def pytest_parser(stdout, stderr, previous_reports=None):
 
 
 def eslint_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from eslint stdout"""
     lines = stdout.split('\n')
     eslint_summary_regex = r'^✖.*'
     summary_lines = [line for line in lines if re.search(eslint_summary_regex, line)]
@@ -147,7 +145,6 @@ def extract_karma_coverage_summary(line):
 
 
 def jasmine_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from jasmine stdout"""
     lines = stdout.split('\n')
     jasmine_summary_regex = r'\(.+\): Executed \d+ of \d+ (SUCCESS|\(\d+ FAILED\)( ERROR)?) \(.+ secs / .+ secs\)'
 
@@ -167,7 +164,6 @@ def jasmine_parser(stdout, stderr, previous_reports=None):
 
 
 def karma_coverage_parser(stdout, stderr, previous_reports=None):
-    """Returns test coverage summary and list of errors from karma stdout"""
     reports = [report for report in previous_reports if report['type'] in ['jasmine', 'mocha']]
     for report in reports:
         lines = report['stdout'].split('\n')
@@ -210,7 +206,6 @@ def extract_mocha_summary(lines):
 
 
 def mocha_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from mocha stdout"""
     lines = stdout.split('\n')
     mocha_summary_start_regex = r'^SUMMARY:$'
 
@@ -230,11 +225,12 @@ def mocha_parser(stdout, stderr, previous_reports=None):
 
 
 def radon_maintainability_parser(stdout, stderr, previous_reports=None):
-    """Returns summary and list of errors from mocha stdout"""
+    """
+    Example line: apps/api/urls.py - A
+    """
     lines = stdout.split('\n')[:-1]
     summary = {'A': 0, 'B': 0, 'C': 0}
     for line in lines:
-        # example line: apps/api/urls.py - A
         maintainability = line.split(' ')[2]
         assert maintainability in ['A', 'B', 'C']
         summary[maintainability] += 1
@@ -244,4 +240,24 @@ def radon_maintainability_parser(stdout, stderr, previous_reports=None):
         'stdout': stdout,
         'stderr': stderr,
         'summary': summary,
+    }
+
+
+def coffeelint_parser(stdout, stderr, previous_reports=None):
+    """
+    Example summary line:
+    ✗ Lint! » 98 errors and 0 warnings in 41 files
+    """
+    lines = stdout.split('\n')
+    summary_line = lines[-3].split(' ')
+    total_errors = int(summary_line[3])
+    total_warnings = int(summary_line[6])
+    return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': {
+            'total_problems': total_errors + total_warnings,
+            'total_errors': total_errors,
+            'total_warnings': total_warnings
+        }
     }

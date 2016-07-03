@@ -175,3 +175,16 @@ radon_maintainability_output = dedent("""\
     apps/api/portfolio_util.py - C
     apps/api/admin.py - A
     """)
+
+
+coffeelint_output = dedent("""\
+    ✗ src/app/services/GenericCaseActions.coffee
+       ✗ #32: Line exceeds maximum allowed length. Length is 88, max is 80.
+    ✓ src/app/services/LawyerProfile.coffee
+    ✓ src/app/services/VersionFactory.coffee
+    ✗ src/app/services/VindicationCase.coffee
+       ✗ #6: Line exceeds maximum allowed length. Length is 82, max is 80.
+
+    ✗ Lint! » 98 errors and 0 warnings in 41 files
+
+    """)
