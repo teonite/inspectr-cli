@@ -191,7 +191,7 @@ def karma_coverage_parser(stdout, stderr, previous_reports=None):
 
 def extract_mocha_summary(lines):
     """
-    Example SUCCESS mocha summary lines (both lines can be missing if no tests passed/failed):
+    Example mocha summary lines (both lines can be missing if no tests passed/failed):
     ✔ 3 tests completed
     ✖ 1 test failed
     """
@@ -217,7 +217,7 @@ def mocha_parser(stdout, stderr, previous_reports=None):
     mocha_summary = None
     summary_lines = [index for index, line in enumerate(lines) if re.search(mocha_summary_start_regex, line)]
     for line_index in summary_lines:
-        mocha_summary = extract_mocha_summary(lines[line_index+1:line_index+3])
+        mocha_summary = extract_mocha_summary(lines[line_index + 1:line_index + 3])
 
     if mocha_summary is None:
         raise ValueError('Karma summary line not found in input: %s' % stdout)
@@ -226,4 +226,22 @@ def mocha_parser(stdout, stderr, previous_reports=None):
         'stdout': stdout,
         'stderr': stderr,
         'summary': mocha_summary
+    }
+
+
+def radon_maintainability_parser(stdout, stderr, previous_reports=None):
+    """Returns summary and list of errors from mocha stdout"""
+    lines = stdout.split('\n')[:-1]
+    summary = {'A': 0, 'B': 0, 'C': 0}
+    for line in lines:
+        # example line: apps/api/urls.py - A
+        maintainability = line.split(' ')[2]
+        assert maintainability in ['A', 'B', 'C']
+        summary[maintainability] += 1
+
+    summary['total'] = sum(summary.values())
+    return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': summary,
     }

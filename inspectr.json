@@ -12,6 +12,10 @@
     {
       "type": "coverage-py",
       "command": "coverage report"
+    },
+    {
+      "type": "radon-maintainability",
+      "command": "radon mi inspectr"
     }
   ]
 }

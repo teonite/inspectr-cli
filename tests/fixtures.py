@@ -161,3 +161,17 @@ pytest_output_success = dedent("""\
 
     ============================================================================================ 21 passed in 0.05 seconds =============================================================================================
     """)
+
+
+radon_maintainability_output = dedent("""\
+    apps/api/mixins.py - A
+    apps/api/serializers.py - B
+    apps/api/tests.py - A
+    apps/api/index_views.py - A
+    apps/api/__init__.py - A
+    apps/api/urls.py - A
+    apps/api/excel_exporter.py - B
+    apps/api/model_views.py - C
+    apps/api/portfolio_util.py - C
+    apps/api/admin.py - A
+    """)
