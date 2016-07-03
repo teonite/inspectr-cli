@@ -9,7 +9,7 @@ RUN cd $(npm root -g)/npm \
 RUN apt-get update && apt-get install --assume-yes \
     python3 \
     python3-pip
-
+RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 RUN pip3 install --upgrade setuptools
 
 ADD . /inspectr
