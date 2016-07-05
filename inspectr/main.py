@@ -51,7 +51,7 @@ def run():
             # load config file
             connector_config_dict = loads(config_file.read())
     except:
-        print(colored('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.Red))
+        print(colored('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.RED))
         sys.exit(1)
     config_dict.update(connector_config_dict)
 
