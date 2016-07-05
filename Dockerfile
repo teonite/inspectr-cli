@@ -7,8 +7,15 @@ RUN cd $(npm root -g)/npm \
  && sed -i -e s/graceful-fs/fs-extra/ -e s/fs\.rename/fs.move/ ./lib/utils/rename.js
 
 RUN apt-get update && apt-get install --assume-yes \
+    locales \
     python3 \
     python3-pip
+
+RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 RUN pip3 install --upgrade setuptools
 
