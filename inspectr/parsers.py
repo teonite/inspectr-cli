@@ -28,7 +28,8 @@ def unittest_parser(stdout, stderr, previous_reports=None):
         'stderr': stderr,
         'summary': {
             'total_tests': total_tests,
-            'failed_tests': failed_tests
+            'failed_tests': failed_tests,
+            'passed_tests': total_tests - failed_tests,
         }
     }
 
@@ -69,7 +70,8 @@ def pytest_parser(stdout, stderr, previous_reports=None):
         'stderr': stderr,
         'summary': {
             'passed_tests': passed_tests,
-            'failed_tests': failed_tests
+            'failed_tests': failed_tests,
+            'total_tests': passed_tests + failed_tests
         }
     }
 
@@ -125,7 +127,8 @@ def extract_jasmine_summary(line):
     return {
         'total_tests': total_tests,
         'executed_tests': executed_tests,
-        'failed_tests': failed_tests
+        'failed_tests': failed_tests,
+        'passed_tests': executed_tests - failed_tests
     }
 
 

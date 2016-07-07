@@ -25,7 +25,8 @@ def test_parse_unittest_output():
     assert len(parsed['stderr'].split('\n')) == 14
     assert parsed['summary'] == {
         'total_tests': 2,
-        'failed_tests': 1
+        'failed_tests': 1,
+        'passed_tests': 1
     }
 
 
@@ -70,6 +71,7 @@ def test_parse_pytest_output_success():
     assert parsed['summary'] == {
         'passed_tests': 21,
         'failed_tests': 0,
+        'total_tests': 21
     }
 
 
@@ -81,6 +83,7 @@ def test_parse_pytest_output_fail():
     assert parsed['summary'] == {
         'passed_tests': 38,
         'failed_tests': 4,
+        'total_tests': 42
     }
 
 
@@ -138,7 +141,8 @@ def test_parse_karma_output():
     assert parsed['summary'] == {
         'total_tests': 1,
         'executed_tests': 1,
-        'failed_tests': 0
+        'failed_tests': 0,
+        'passed_tests': 1
     }
 
 
@@ -170,7 +174,8 @@ def test_extract_karma_summary_fail():
     assert parsed == {
         'total_tests': 1,
         'executed_tests': 1,
-        'failed_tests': 1
+        'failed_tests': 1,
+        'passed_tests': 0
     }
 
 
@@ -179,7 +184,8 @@ def test_extract_karma_summary_success():
     assert parsed == {
         'total_tests': 1,
         'executed_tests': 1,
-        'failed_tests': 0
+        'failed_tests': 0,
+        'passed_tests': 1
     }
 
 
@@ -202,7 +208,7 @@ def test_parse_mocha_output_success():
     assert parsed['summary'] == {
         'total_tests': 4,
         'passed_tests': 4,
-        'failed_tests': 0
+        'failed_tests': 0,
     }
 
 
