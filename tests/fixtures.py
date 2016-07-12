@@ -93,6 +93,30 @@ jasmine_output = dedent("""\
 
     """)
 
+jasmine_output_integers = dedent("""\
+    26 06 2016 12:12:55.610:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/node_modules/sinon/pkg/sinon-timers.js" does not match any file.
+    26 06 2016 12:12:55.618:WARN [watcher]: Pattern "/home/jck/workspace/work/teonite/azoty/web-app/dist/lib/angularjs/angular-locale_en-gb.js" does not match any file.
+    26 06 2016 12:12:56.434:INFO [karma]: Karma v1.0.0 server started at http://localhost:9876/
+    26 06 2016 12:12:56.434:INFO [launcher]: Launching browser PhantomJS with unlimited concurrency
+    26 06 2016 12:12:56.440:INFO [launcher]: Starting browser PhantomJS
+    26 06 2016 12:12:56.665:INFO [PhantomJS 2.1.1 (Linux 0.0.0)]: Connected on socket /#IoRwzZfZzsf3BNGbAAAA with id 9818241
+    PhantomJS 2.1.1 (Linux 0.0.0): Executed 1 of 1 SUCCESS (0.206 secs / 0 secs)
+    -------------------|----------|----------|----------|----------|----------------|
+    File               |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+    -------------------|----------|----------|----------|----------|----------------|
+     js/               |     1.85 |        0 |        0 |     1.85 |                |
+      app.js           |     1.85 |        0 |        0 |     1.85 |... 700,701,705 |
+     js/ng-app/        |     4.63 |     0.54 |     1.08 |     4.72 |                |
+      cms.js           |     4.63 |     0.54 |     1.08 |     4.72 |... 10554,10556 |
+     js/portfolio-app/ |     6.06 |        0 |        0 |      6.1 |                |
+      portfolio.js     |     6.06 |        0 |        0 |      6.1 |... 6,2433,2438 |
+    -------------------|----------|----------|----------|----------|----------------|
+     All files         |      100 |      100 |      100 |      100 |                |
+    -------------------|----------|----------|----------|----------|----------------|
+
+
+    """)
+
 
 mocha_success_output = dedent("""\
     02 07 2016 09:19:45.773:INFO [PhantomJS 2.1.1 (Linux 0.0.0)]: Connected on socket /#VePfZy9E04WvElXUAAAA with id 13721294

@@ -170,8 +170,7 @@ def karma_coverage_parser(stdout, stderr, previous_reports=None):
     reports = [report for report in previous_reports if report['type'] in ['jasmine', 'mocha']]
     for report in reports:
         lines = report['stdout'].split('\n')
-
-        coverage_summary_regex = r'All files\s*\|\s*\d+\.\d+\s*\|\s*\d+\.\d+\s*\|\s*\d+\.\d+\s*\|\s*\d+\.\d+\s*\|\s*\|'
+        coverage_summary_regex = r'All files\s*\|\s*\d+(\.\d+)?\s*\|\s*\d+(\.\d+)?\s*\|\s*\d+(\.\d+)?\s*\|\s*\d+(\.\d+)?\s*\|\s*\|'
 
         coverage_summary = None
         summary_lines = [line for line in lines if re.search(coverage_summary_regex, line)]
