@@ -2,12 +2,13 @@
   "name": "inspectr-docker",
   "version": "0.0.1",
   "description": "Container to run inspectr in - contains all supported reporters.",
-  "repository": {
-  },
+  "repository": {},
   "license": "MIT",
   "dependencies": {
     "eslint": "^2.13.1",
-    "karma": "^1.1.0",
+    "karma-cli": "^1.0.1",
     "coffeelint": "^1.15.7"
+  },
+  "devDependencies": {
   }
 }
