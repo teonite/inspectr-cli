@@ -5,7 +5,8 @@ from os.path import expanduser
 from inspectr.utils import print_command, print_command_fail, print_command_ok
 from .executor import execute
 from .parsers import (flake8_parser, coverage_py_parser, eslint_parser, jasmine_parser, karma_coverage_parser,
-                      pytest_parser, unittest_parser, mocha_parser, radon_maintainability_parser, coffeelint_parser)
+                      pytest_parser, unittest_parser, mocha_parser, radon_maintainability_parser, coffeelint_parser,
+                      radon_cyclomatic_complexity_parser)
 from .utils import save_report, validate_and_parse_config, colored
 import time
 from datetime import datetime
@@ -24,7 +25,8 @@ parsers = {
     'mocha': mocha_parser,
     'karma-coverage': karma_coverage_parser,
     'pytest': pytest_parser,
-    'radon-maintainability': radon_maintainability_parser
+    'radon-maintainability': radon_maintainability_parser,
+    'radon-cyclomatic-complexity': radon_cyclomatic_complexity_parser,
 }
 
 

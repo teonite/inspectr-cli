@@ -201,6 +201,26 @@ radon_maintainability_output = dedent("""\
     """)
 
 
+radon_cyclomatic_complexity_output = dedent("""\
+    inspectr/main.py
+        F 36:0 run - B
+        F 31:0 get_datetime - A
+    inspectr/utils.py
+        F 13:0 validate_and_parse_config - B
+        F 38:0 init_db - A
+        F 28:0 validate_connector_config - A
+        F 77:0 print_command - A
+        F 60:0 save_report - A
+        F 73:0 colored - A
+        F 84:0 print_command_ok - A
+        F 91:0 print_command_fail - A
+    inspectr/executor.py
+        F 11:0 decode - A
+        F 22:0 execute - A
+        F 5:0 clean - A
+    """)
+
+
 coffeelint_output = dedent("""\
     ✗ src/app/services/GenericCaseActions.coffee
        ✗ #32: Line exceeds maximum allowed length. Length is 88, max is 80.

@@ -245,6 +245,29 @@ def radon_maintainability_parser(stdout, stderr, previous_reports=None):
     }
 
 
+def radon_cyclomatic_complexity_parser(stdout, stderr, previous_reports=None):
+    """
+    Example line:     F 31:0 get_datetime - A
+    """
+    lines = stdout.split('\n')[:-1]
+    summary = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0}
+    for line in lines:
+        words = line.split(' ')
+        if len(words) == 1:
+            continue
+
+        complexity = words[8]
+        assert complexity in ['A', 'B', 'C', 'D', 'E', 'F']
+        summary[complexity] += 1
+
+    summary['total'] = sum(summary.values())
+    return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': summary,
+    }
+
+
 def coffeelint_parser(stdout, stderr, previous_reports=None):
     """
     Example summary line:
