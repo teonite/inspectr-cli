@@ -14,7 +14,7 @@ code quality tools. Those are the ones supported now, more under way:
 
 # Configuration
 
-Place <b>inspectr.json</b> in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
+1. Place <b>inspectr.json</b> in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
 
 <pre>
 {
@@ -57,8 +57,7 @@ Place <b>inspectr.json</b> in your project directory. Example below shows all av
 }
 </pre>
 
-Place <b>.inspectr_connector.json</b> in your home directory. This file describes where to store
-inspection results to be displayed by inspectr-dashboard. Example:
+2. Map .inspectr_connector.json in your backend container configuration at Rancher, f.e. /s/inspectr/.inspectr_connector.json:/root/.inspectr_connector.json
 
 <pre>
 {
@@ -69,3 +68,17 @@ inspection results to be displayed by inspectr-dashboard. Example:
     "reports_history_table": "reports_history"
 }
 </pre>
+
+3. Add command that runs inspectr during backend container startup. For example you can add it to tools/run_backend.sh:
+
+<pre>
+if [[ -n "$INSPECTR" ]] && [ "$INSPECTR" == "inspect" ]; then
+    echo "Env set - running inspectr"
+    cd /backend
+    inspectr &
+else
+    echo "Not running inspectr - env not set"
+fi
+</pre>
+
+4. Add variable INSPECTR = 'inspect' to backend container configuration at Rancher.
