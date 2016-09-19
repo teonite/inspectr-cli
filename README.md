@@ -57,7 +57,24 @@ code quality tools. Those are the ones supported now, more under way:
 }
 </pre>
 
-2. Map .inspectr_connector.json in your backend container configuration at Rancher, f.e. /s/inspectr/.inspectr_connector.json:/root/.inspectr_connector.json
+2. Add necessary config files specific to your reporters. This is an example for Dockerfile for backend container:
+
+<pre>
+ADD inspectr.json /backend/inspectr.json
+ADD .coveragerc /backend/.coveragerc
+ADD .flake8 /backend/.flake8
+</pre>
+
+3. Map .inspectr_connector.json in your backend container configuration at Rancher, for example:
+
+<pre>
+backend:
+  image: ${BACKEND_IMAGE}
+  volumes:
+   - /s/inspectr/.inspectr_connector.json:/root/.inspectr_connector.json
+</pre>
+
+An example inspectr_connector.json file:
 
 <pre>
 {
@@ -69,7 +86,7 @@ code quality tools. Those are the ones supported now, more under way:
 }
 </pre>
 
-3. Add command that runs inspectr during backend container startup. For example you can add it to tools/run_backend.sh:
+4. Add command that runs inspectr during backend container startup. For example you can add it to tools/run_backend.sh:
 
 <pre>
 if [[ -n "$INSPECTR" ]] && [ "$INSPECTR" == "inspect" ]; then
@@ -81,4 +98,15 @@ else
 fi
 </pre>
 
-4. Add variable INSPECTR = 'inspect' to backend container configuration at Rancher.
+5. Add variable INSPECTR = 'inspect' to backend container configuration at Rancher.
+
+6. Add necessary requirements to backend container:
+
+<pre>
+inspectr==0.1.0
+flake8==2.5.4
+radon==1.4.0
+coverage==4.1
+pytest==2.9.2
+pytest-django==2.9.1
+</pre>
