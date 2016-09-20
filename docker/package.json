@@ -10,5 +10,6 @@
     "coffeelint": "^1.15.7"
   },
   "devDependencies": {
+    "babel-eslint": "^6.1.2"
   }
 }
