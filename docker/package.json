@@ -7,9 +7,9 @@
   "dependencies": {
     "eslint": "^2.13.1",
     "karma-cli": "^1.0.1",
-    "coffeelint": "^1.15.7"
+    "coffeelint": "^1.15.7",
+    "babel-eslint": "^6.1.2"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.2"
   }
 }
