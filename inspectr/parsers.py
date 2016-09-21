@@ -286,3 +286,14 @@ def coffeelint_parser(stdout, stderr, previous_reports=None):
             'total_warnings': total_warnings
         }
     }
+
+
+def tslint_parser(stdout, stderr, previous_reports=None):
+    lines = stdout.split('\n')
+    return {
+        'stdout': stdout,
+        'stderr': stderr,
+        'summary': {
+            'total_errors': max(0, len(lines) - 1)
+        }
+    }

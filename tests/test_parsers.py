@@ -3,10 +3,10 @@ import pytest
 from .fixtures import (flake8_output, unittest_output, eslint_output_custom, mocha_success_output, mocha_fail_output, coverage_output,
                        eslint_output, eslint_output_noerrors, jasmine_output, jasmine_summary_fail_line, jasmine_summary_success_line,
                        karma_coverage_summary_line, coverage_output_small, pytest_output_success, pytest_output_fail, radon_maintainability_output,
-                       coffeelint_output, jasmine_output_integers, radon_cyclomatic_complexity_output)
+                       coffeelint_output, jasmine_output_integers, radon_cyclomatic_complexity_output, tslint_output)
 from inspectr.parsers import (flake8_parser, unittest_parser, coverage_py_parser, eslint_parser, jasmine_parser, radon_maintainability_parser,
                               extract_karma_coverage_summary, extract_jasmine_summary, karma_coverage_parser, pytest_parser, mocha_parser,
-                              coffeelint_parser, radon_cyclomatic_complexity_parser)
+                              coffeelint_parser, radon_cyclomatic_complexity_parser, tslint_parser)
 
 
 def test_parse_flake8_output():
@@ -297,3 +297,12 @@ def test_coffeelint_output():
 def test_coffeelint_output_output_unparsable():
     with pytest.raises(Exception):
         coffeelint_parser('Unparsable string. Seriously, dont even try.', '')
+
+
+def test_parse_tslint_output():
+    parsed = tslint_parser(tslint_output, '')
+
+    assert len(parsed['stdout'].split('\n')) == 7
+    assert parsed['summary'] == {
+        'total_errors': 6
+    }

@@ -232,3 +232,12 @@ coffeelint_output = dedent("""\
     ✗ Lint! » 98 errors and 0 warnings in 41 files
 
     """)
+
+tslint_output = dedent("""\
+    src/app/views/personalization/step3.ts[18, 13]: The selector of the component "PersonalizationStep3View" should be named kebab-case (https://goo.gl/mBg67Z)
+    src/app/views/personalization/step3.ts[17, 1]: Implement lifecycle hook interfaces (https://goo.gl/w1Nwk3)
+    src/app/views/personalization/step3.ts[23, 14]: The name of the class PersonalizationStep3View should end with the suffix Component (https://goo.gl/5X1TE7)
+    src/app/views/start.ts[2, 9]: Unused import: 'ActivatedRoute'
+    src/app/views/start.ts[1, 25]: " should be '
+    src/app/views/start.ts[2, 38]: " should be '
+    """)
