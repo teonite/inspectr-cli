@@ -10,7 +10,8 @@
     "coffeelint": "^1.15.7",
     "babel-eslint": "^6.1.2",
     "tslint": "^3.15.1",
-    "codelyzer": "0.0.28"
+    "codelyzer": "0.0.28",
+    "typescript": "1.8.10"
   },
   "devDependencies": {
   }
