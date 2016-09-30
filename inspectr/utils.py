@@ -62,11 +62,19 @@ def save_report(report, config):
     connection = r.connect(config['rethinkdb_host'], config['rethinkdb_port'])
     init_db(connection, config)
 
-    # delete old reports from reports table and insert new report
-    r.db(config['rethinkdb_db']).table(config['reports_table']).filter({'project_name': report['project_name']}).delete().run(connection)
+    # Generate uuid from project_name
+    uuid = r.uuid(report['project_name']).run(connection)
+    report['id'] = uuid
+
+    print(report)
+    # Insert report, and, if conflict occurs (there is another entity with this id), replace old entity
     r.db(config['rethinkdb_db']).table(config['reports_table']).insert(report).run(connection)
 
-    # insert report to reports_history table
+    # Report in history should have unique id, but also should have project_id to be able to reference to current report
+    report['project_id'] = report['id']
+    report['id'] = r.uuid().run(connection)
+
+    # Save report to report_history
     r.db(config['rethinkdb_db']).table(config['reports_history_table']).insert(report).run(connection)
 
 
