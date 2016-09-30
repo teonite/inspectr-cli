@@ -66,7 +66,6 @@ def save_report(report, config):
     uuid = r.uuid(report['project_name']).run(connection)
     report['id'] = uuid
 
-    print(report)
     # Insert report, and, if conflict occurs (there is another entity with this id), replace old entity
     r.db(config['rethinkdb_db']).table(config['reports_table']).insert(report).run(connection)
 
