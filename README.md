@@ -14,7 +14,7 @@ code quality tools. Those are the ones supported now, more under way:
 
 # Configuration
 
-1. Place **inspectr.json** in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
+1. Place `inspectr.json` in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
 
     ```
     {
@@ -91,7 +91,7 @@ code quality tools. Those are the ones supported now, more under way:
     ```
 
 #Running
-Simply go to your project and InspectR it! (remember that it must contain **inspectr.json**!)
+Simply go to your project and InspectR it! (remember that it must contain `inspectr.json`!)
 
 ```
 cd /path/to/my/project
