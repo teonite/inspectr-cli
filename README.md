@@ -90,7 +90,8 @@ code quality tools. Those are the ones supported now, more under way:
     python setup.py
     ```
 
-#Running
+# Running
+
 Simply go to your project and InspectR it! (remember that it must contain `inspectr.json`!)
 
 ```
