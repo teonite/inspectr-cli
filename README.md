@@ -57,9 +57,9 @@ code quality tools. Those are the ones supported now, more under way:
     }
     ```
 
-2. Add .inspectr_connector.json into Your home directory. In it, You need to specify Your [RethinkDB][rethink] instance details
+2. Add `.inspectr_connector.json` into Your home directory. In it, You need to specify Your [RethinkDB][rethink] instance details
 
-    An example inspectr_connector.json file:
+    An example `.inspectr_connector.json` file:
 
     ```
     {
