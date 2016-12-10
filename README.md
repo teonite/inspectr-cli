@@ -1,4 +1,43 @@
-# InspectR CLI
+# Quick start
+
+- Add `inspectr.json` to your project root directory. Example:
+
+    ```
+    {
+      "project_name": "My Project",
+    
+      "reporters": [
+        {
+          "type": "jasmine",
+          "command": "karma start karma.conf.js --single-run"
+        },
+        {
+          "type": "mocha",
+          "command": "karma start karma.conf.js --single-run"
+        }
+      ]
+    }
+    ```
+
+- Add Dashboard connector file - `.inspectr_connector.json` in your home directory. Example:
+
+    ```
+    {
+        "rethinkdb_host": "localhost",
+        "rethinkdb_port": 28015,
+        "rethinkdb_db": "inspectr", //do not change this value
+        "reports_table": "reports", //do not change this value
+        "reports_history_table": "reports_history" // do not change this value
+    }
+    ```
+
+- Install inspectr to Your Venv
+
+    `pip install inspectr`
+    
+- Test your project! Run `inspectr` command in your project root directory
+
+# InspectR CLI Overview
 
 Inspectr gives you insight into quality of your code at a glance. It supports variety of
 code quality tools. Those are the ones supported now, more under way:
