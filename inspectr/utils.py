@@ -4,8 +4,7 @@ import rethinkdb as r
 from colorama import Style, Fore
 
 
-common_required_settings = ['project_name', 'reporters']
-required_connector_settings = ['rethinkdb_host', 'rethinkdb_port', 'rethinkdb_db', 'reports_table', 'reports_history_table']
+common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'rethinkdb_port']
 
 required_reporter_settings = ['type', 'command']
 
@@ -25,16 +24,6 @@ def validate_and_parse_config(config_in):
     return config
 
 
-def validate_connector_config(config_in):
-    config = deepcopy(config_in)
-    # check if all required configuration options are present in config file
-    if None in [config.get(key) for key in required_connector_settings]:
-        print('Error: Incomplete connector configuration (required settings: %s)' % required_connector_settings)
-        sys.exit(1)
-
-    return config
-
-
 def init_db(connection, config):
     """Creates database, tables and indices"""
     try:
@@ -43,7 +32,7 @@ def init_db(connection, config):
         # database already exists
         pass
 
-    for table in [config['reports_table'], config['reports_history_table']]:
+    for table in ['reports', 'reports_history']:
         try:
             r.db(config['rethinkdb_db']).table_create(table).run(connection)
         except r.errors.ReqlOpFailedError:
@@ -51,7 +40,7 @@ def init_db(connection, config):
             pass
 
     try:
-        r.db(config['rethinkdb_db']).table(config['reports_table']).index_create('time_created').run(connection)
+        r.db(config['rethinkdb_db']).table('reports').index_create('time_created').run(connection)
     except r.errors.ReqlOpFailedError:
         # index already exists
         pass
@@ -66,16 +55,16 @@ def save_report(report, config):
     uuid = r.uuid(report['project_name']).run(connection)
     report['id'] = uuid
 
-    r.db(config['rethinkdb_db']).table(config['reports_table']).get(uuid).delete().run(connection)
+    r.db('inspectr').table('reports').get(uuid).delete().run(connection)
     # Insert report
-    r.db(config['rethinkdb_db']).table(config['reports_table']).insert(report).run(connection)
+    r.db('inspectr').table(config['reports']).insert(report).run(connection)
 
     # Report in history should have unique id, but also should have project_id to be able to reference to current report
     report['project_id'] = report['id']
     report['id'] = r.uuid().run(connection)
 
     # Save report to report_history
-    r.db(config['rethinkdb_db']).table(config['reports_history_table']).insert(report).run(connection)
+    r.db('inspectr').table('reports_history').insert(report).run(connection)
 
 
 def colored(message, color=Style.RESET_ALL):

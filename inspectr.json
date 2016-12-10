@@ -1,5 +1,7 @@
 {
   "project_name": "Inspectr CLI",
+  "rethinkdb_host": "localhost",
+  "rethinkdb_port": 28015,
   "reporters": [
     {
       "type": "flake8",
@@ -12,14 +14,6 @@
     {
       "type": "coverage-py",
       "command": "coverage report"
-    },
-    {
-      "type": "radon-maintainability",
-      "command": "radon mi inspectr"
-    },
-    {
-      "type": "radon-cyclomatic-complexity",
-      "command": "radon cc inspectr"
     }
   ]
 }
