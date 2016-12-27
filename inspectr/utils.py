@@ -5,6 +5,9 @@ from colorama import Style, Fore
 
 
 common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'rethinkdb_port']
+default_settings = {
+    'rethinkdb_db': 'inspectr'
+}
 
 required_reporter_settings = ['type', 'command']
 
@@ -16,10 +19,15 @@ def validate_and_parse_config(config_in):
         print('Error: Incomplete configuration (required settings: %s)' % common_required_settings)
         sys.exit(1)
 
+    # check if all required configuration options are present in all reporters
     for reporter in config['reporters']:
         if False in [key in reporter for key in required_reporter_settings]:
             print('Error: Invalid reporter configuration:\n%s\n\nRequired settings: %s' % (reporter, required_reporter_settings))
             sys.exit(1)
+
+    # add default settings if not present in config file
+    for key, value in default_settings.items():
+        config[key] = config_in.get(key, value)
 
     return config
 
@@ -55,16 +63,16 @@ def save_report(report, config):
     uuid = r.uuid(report['project_name']).run(connection)
     report['id'] = uuid
 
-    r.db('inspectr').table('reports').get(uuid).delete().run(connection)
+    r.db(config['rethinkdb_db']).table('reports').get(uuid).delete().run(connection)
     # Insert report
-    r.db('inspectr').table(config['reports']).insert(report).run(connection)
+    r.db(config['rethinkdb_db']).table('reports').insert(report).run(connection)
 
     # Report in history should have unique id, but also should have project_id to be able to reference to current report
     report['project_id'] = report['id']
     report['id'] = r.uuid().run(connection)
 
     # Save report to report_history
-    r.db('inspectr').table('reports_history').insert(report).run(connection)
+    r.db(config['rethinkdb_db']).table('reports_history').insert(report).run(connection)
 
 
 def colored(message, color=Style.RESET_ALL):
