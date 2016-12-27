@@ -28,7 +28,5 @@ RUN cd /inspectr/docker && pip3 install -r reporter-requirements.pip
 
 RUN cd /inspectr && python3 setup.py install
 
-VOLUME /code /root/.inspectr_connector.json
-
 WORKDIR /code
 CMD ["inspectr"]
