@@ -5,6 +5,8 @@
     ```
     {
       "project_name": "My Project",
+      "rethinkdb_host": "localhost",
+      "rethinkdb_port": 28015,
     
       "reporters": [
         {
@@ -16,18 +18,6 @@
           "command": "karma start karma.conf.js --single-run"
         }
       ]
-    }
-    ```
-
-- Add Dashboard connector file - `.inspectr_connector.json` in your home directory. Example:
-
-    ```
-    {
-        "rethinkdb_host": "localhost",
-        "rethinkdb_port": 28015,
-        "rethinkdb_db": "inspectr", //do not change this value
-        "reports_table": "reports", //do not change this value
-        "reports_history_table": "reports_history" // do not change this value
     }
     ```
 
@@ -58,6 +48,8 @@ code quality tools. Those are the ones supported now, more under way:
     ```
     {
       "project_name": "My Project",
+      "rethinkdb_host": "localhost",
+      "rethinkdb_port": 28015,
     
       "reporters": [
         {
@@ -96,27 +88,14 @@ code quality tools. Those are the ones supported now, more under way:
     }
     ```
 
-2. Add `.inspectr_connector.json` into Your home directory. In it, You need to specify Your [RethinkDB][rethink] instance details
-
-    An example `.inspectr_connector.json` file:
-
-    ```
-    {
-        "rethinkdb_host": "localhost",
-        "rethinkdb_port": 28015,
-        "rethinkdb_db": "inspectr", //do not change this value
-        "reports_table": "reports", //do not change this value
-        "reports_history_table": "reports_history" // do not change this value
-    }
-    ```
-
+    **NOTE**
     If you have problems setting up Your RethinkDB instance, simply run it as Docker container: 
 
     ```
     docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
     ```
 
-3. Install Python virtual environment using, e.x. this code : 
+2. Install Python virtual environment : 
 
     ```
     pip install virtualenv
@@ -124,9 +103,9 @@ code quality tools. Those are the ones supported now, more under way:
     source ENV/bin/activate
     ```
 
-4. Install InspectR CLI to your venv 
+3. Install InspectR CLI to your venv 
     ```
-    python setup.py
+    pip install inspectr
     ```
 
 # Running
@@ -149,14 +128,6 @@ Results should be visible in [InspectR Dashboard][dashboard]
     ADD inspectr.json /backend/inspectr.json
     ADD .coveragerc /backend/.coveragerc
     ADD .flake8 /backend/.flake8
-    ```
-
-3. Map `.inspectr_connector.json` in your backend container configuration in `docker-compose.yml` file, for example:
-    ```
-    backend:
-      image: ${BACKEND_IMAGE}
-      volumes:
-       - /s/inspectr/.inspectr_connector.json:/root/.inspectr_connector.json
     ```
 
 4. Add command that runs inspectr during backend container startup. For example you can add it to tools/run_backend.sh:
