@@ -1,4 +1,40 @@
-# Quick start
+# InspectR CLI
+
+Command line interface for InspectR tool.
+
+## Overview
+
+Inspectr gives you insight into quality of your code at a glance. It supports variety of
+code quality tools. Those are the ones supported now, more under way:
+
+* flake8 python linter
+* python unittests
+* py.test tests
+* coverage.py reports
+* eslint javascript linter
+* jasmine tests
+* mocha tests
+* karma-coverage reports
+
+## Quick start
+
+- Install Python virtual environment : 
+
+    ```
+    pip install virtualenv
+    virtualenv ENV
+    source ENV/bin/activate
+    ```
+
+- Install inspectr to Your Venv
+
+    `pip install inspectr`
+    
+- Run RethinkDB instance if You have one. If not, we recomend You to run it as a Docker container:
+
+    ```
+    docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
+    ```
 
 - Add `inspectr.json` to your project root directory. Example:
 
@@ -21,37 +57,15 @@
     }
     ```
 
-- Install inspectr to Your Venv
-
-    `pip install inspectr`
     
-- Test your project! Run `inspectr` command in your project root directory
+- Test your project! Run `inspectr` command in your project root directory. Results should be visible in [InspectR Dashboard][dashboard]
 
-# InspectR CLI Overview
+## Reporters
 
-Inspectr gives you insight into quality of your code at a glance. It supports variety of
-code quality tools. Those are the ones supported now, more under way:
+All available reporters
 
-* flake8 python linter
-* python unittests
-* py.test tests
-* coverage.py reports
-* eslint javascript linter
-* jasmine tests
-* mocha tests
-* karma-coverage reports
-
-# Configuration
-
-1. Place `inspectr.json` in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
-
-    ```
-    {
-      "project_name": "My Project",
-      "rethinkdb_host": "localhost",
-      "rethinkdb_port": 28015,
-    
-      "reporters": [
+    ```    
+    "reporters": [
         {
           "type": "flake8",
           "command": "flake8 apps/"
@@ -84,40 +98,8 @@ code quality tools. Those are the ones supported now, more under way:
           "type": "karma-coverage",
           "command": null
         }
-      ]
-    }
+    ]
     ```
-
-    **NOTE**
-    If you have problems setting up Your RethinkDB instance, simply run it as Docker container: 
-
-    ```
-    docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
-    ```
-
-2. Install Python virtual environment : 
-
-    ```
-    pip install virtualenv
-    virtualenv ENV
-    source ENV/bin/activate
-    ```
-
-3. Install InspectR CLI to your venv 
-    ```
-    pip install inspectr
-    ```
-
-# Running
-
-Simply go to your project and InspectR it! (remember that it must contain `inspectr.json`!)
-
-```
-cd /path/to/my/project
-inspectr
-```
-
-Results should be visible in [InspectR Dashboard][dashboard]
 
 # Dockerizing InspectR CLI
 
