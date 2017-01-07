@@ -29,14 +29,8 @@ code quality tools. Those are the ones supported now, more under way:
 - Install inspectr to Your Venv
 
     `pip install inspectr`
-    
-- Run RethinkDB instance if You have one. If not, we recomend You to run it as a Docker container:
 
-    ```
-    docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
-    ```
-
-- Add `inspectr.json` to your project root directory. Example:
+- Add `inspectr.json` to your project root directory. RethinkDB is created in [InspectR Dashboard][dashboard], so host and port can be set there. Example:
 
     ```
     {
