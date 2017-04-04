@@ -1,8 +1,14 @@
-# InspectR CLI Overview
+ ![eagle-R]  ![star] ![eagle-L]  
 
-Inspectr gives you insight into quality of your code at a glance. It supports variety of code quality tools. 
-When you add `inspectr.json` file to your project directory and use command `inspectr` reports will be created and save in RethinkDB (so to use this command you need running RethinkDB). 
-The reports will be able in [inspectr-dashboard][dashboard].
+
+# What is InspectR?
+
+InspectR gives you insight into quality of your code at a glance. It supports variety of code quality tools. 
+When you add `inspectr.json` file to your project directory and use command `inspectr` reports from your test tools will be created and save in RethinkDB. 
+
+The reports will be able in [inspectr-dashboard][dashboard] and it looks like this
+
+![example]
 
 Those are the ones supported now, more under way:
 
@@ -49,7 +55,7 @@ Give your `inspectr.json` path instead of `$PWD/project`. If everything went ok 
 Example: `docker run -t --link inspectrdashboard_rethinkdb_1:db_link -v $PWD:/code inspectr_cli` where `inspectrdashboard_rethinkdb_1` is name of your RethinkDB container and `db_link` is parameter of `rethinkdb_host` in `inspectr.json`.
 7. Your reports should be saved in RethinkDB. Use [inspectr-dashboard][dashboard] to see results in browser.
 
-
+For more informations check FAQ at the end of README.
 
 
 # How to run inspectr local?
@@ -142,6 +148,11 @@ For example if you have error
 	Install eslint `npm install -g eslint`
 
 4. If you're inspecting django app local, install django in your virtualenv.
+5. If you're using Inspectr in docker and you want to connect with RethinkDB on localhost run `docker run -t --net="host" -v $PWD/project:/code inspectr_cli`
 
 [rethink]:(https://www.rethinkdb.com/)
 [dashboard]:(https://git.teonite.net/inspectr/inspectr-dashboard)
+[eagle-L]: md_imgs/eagle-L.png "Eagle"
+[eagle-R]: md_imgs/eagle-R.png "Eagle"
+[star]: md_imgs/star.png "Star"
+[example]: md_imgs/example.png "Example"
