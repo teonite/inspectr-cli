@@ -1,6 +1,5 @@
 from json import loads
 import sys
-from os.path import expanduser
 
 from inspectr.utils import print_command, print_command_fail, print_command_ok
 from .executor import execute
@@ -40,7 +39,6 @@ def run():
     init()
     # TODO: config locations as command line param?
     config_path = 'inspectr.json'
-    connector_config_path = expanduser('~') + '/.inspectr_connector.json'
     try:
         with open(config_path, 'r') as config_file:
             # load config file
@@ -48,15 +46,6 @@ def run():
     except:
         print(colored('Error: parsing configuration file %s failed' % config_path, Fore.RED))
         sys.exit(1)
-
-    try:
-        with open(connector_config_path, 'r') as config_file:
-            # load config file
-            connector_config_dict = loads(config_file.read())
-    except:
-        print(colored('Error: parsing connector configuration file %s failed' % connector_config_path, Fore.RED))
-        sys.exit(1)
-    config_dict.update(connector_config_dict)
 
     config = validate_and_parse_config(config_dict)
 
