@@ -1,46 +1,10 @@
-# Quick start
-
-- Add `inspectr.json` to your project root directory. Example:
-
-    ```
-    {
-      "project_name": "My Project",
-    
-      "reporters": [
-        {
-          "type": "jasmine",
-          "command": "karma start karma.conf.js --single-run"
-        },
-        {
-          "type": "mocha",
-          "command": "karma start karma.conf.js --single-run"
-        }
-      ]
-    }
-    ```
-
-- Add Dashboard connector file - `.inspectr_connector.json` in your home directory. Example:
-
-    ```
-    {
-        "rethinkdb_host": "localhost",
-        "rethinkdb_port": 28015,
-        "rethinkdb_db": "inspectr", //do not change this value
-        "reports_table": "reports", //do not change this value
-        "reports_history_table": "reports_history" // do not change this value
-    }
-    ```
-
-- Install inspectr to Your Venv
-
-    `pip install inspectr`
-    
-- Test your project! Run `inspectr` command in your project root directory
-
 # InspectR CLI Overview
 
-Inspectr gives you insight into quality of your code at a glance. It supports variety of
-code quality tools. Those are the ones supported now, more under way:
+Inspectr gives you insight into quality of your code at a glance. It supports variety of code quality tools. 
+When you add `inspectr.json` file to your project directory and use command `inspectr` reports will be created and save in RethinkDB (so to use this command you need running RethinkDB). 
+The reports will be able in [inspectr-dashboard](https://git.teonite.net/inspectr/inspectr-dashboard). 
+
+Those are the ones supported now, more under way:
 
 * flake8 python linter
 * python unittests
@@ -51,12 +15,9 @@ code quality tools. Those are the ones supported now, more under way:
 * mocha tests
 * karma-coverage reports
 
-# Configuration
-
-1. Place `inspectr.json` in your project directory. Example below shows all available reporters - use only the ones that are relevant to your project:
-
-    ```
-    {
+List of reporters:
+```
+{
       "project_name": "My Project",
     
       "reporters": [
@@ -94,40 +55,53 @@ code quality tools. Those are the ones supported now, more under way:
         }
       ]
     }
-    ```
+```
 
-2. Add `.inspectr_connector.json` into Your home directory. In it, You need to specify Your [RethinkDB][rethink] instance details
+# Quick start docker (recommended)
 
-    An example `.inspectr_connector.json` file:
+- Add `inspectr.json` to your project root directory. Example:
 
     ```
     {
-        "rethinkdb_host": "localhost",
-        "rethinkdb_port": 28015,
-        "rethinkdb_db": "inspectr", //do not change this value
-        "reports_table": "reports", //do not change this value
-        "reports_history_table": "reports_history" // do not change this value
+      "project_name": "My Project",
+      "rethinkdb_host": "localhost",
+	  "rethinkdb_port": 28015,
+      
+    
+      "reporters": [
+        {
+          "type": "jasmine",
+          "command": "karma start karma.conf.js --single-run"
+        },
+        {
+          "type": "mocha",
+          "command": "karma start karma.conf.js --single-run"
+        }
+      ]
     }
     ```
+- Build docker image for example: `docker build -t inspectr_cli .` in `inspectr-cli` directory
+- Run your docker image (for example: `docker run -v $PWD/project:/code inspectr_cli`). Give your `inspectr.json` path instead of `$PWD/project`. If everything went ok report will be sent to rethinkDB and will be available in inspectr-dashboard. 
 
-    If you have problems setting up Your RethinkDB instance, simply run it as Docker container: 
+# Quick start local docker (recommended)
 
-    ```
-    docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
-    ```
+If you are using local RethinkDB docker container you have to add your docker RethinkDB IP Address as `rethink_db_host` parameter in `inspectr.json` type `docker inspect --format='{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' REHINKDB_NAME_CONTAINER` put your RethinkDB container name in `REHINKDB_NAME_CONTAINER`, if you're using RethinkDB from `inspectr-dashboard` docker-compose it'll be `inspectrdashboard_rethinkdb_1`.
+    
+# Quick start local
 
-3. Install Python virtual environment using, e.x. this code : 
+1. Run RethinkDB
+2. Install Python virtual environment using, e.x. this code :
+```
+pip3 install virtualenv
+virtualenv env
+source env/bin/activate
+```
+3. Install InspectR CLI to your venv
+`python setup.py install`
+4. Place inspectr.json in your project directory (example above) and use command `inspectr`.
+5. If you're inspecting JS app install (global) dependencies from docker/package.json.
+6. If you're inspecting python app install pip requirements from `requirements.pip` and `docker/reporter-requirements.pip`
 
-    ```
-    pip install virtualenv
-    virtualenv ENV
-    source ENV/bin/activate
-    ```
-
-4. Install InspectR CLI to your venv 
-    ```
-    python setup.py
-    ```
 
 # Running
 
@@ -140,47 +114,22 @@ inspectr
 
 Results should be visible in [InspectR Dashboard][dashboard]
 
-# Dockerizing InspectR CLI
+# FAQ
+ 
+1. If you have problems setting up Your RethinkDB instance, simply run
+ it as Docker container:
+`docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb`
 
-1. Add Your `inspectr.json` to project
+2. You have to run inspectr at your app first to create Collections in RethinkDB, otherwise you'll see error "Collection *reports* does not exist" 
 
-2. Add necessary config files specific to your reporters in Dockerfile for backend container:
-    ```
-    ADD inspectr.json /backend/inspectr.json
-    ADD .coveragerc /backend/.coveragerc
-    ADD .flake8 /backend/.flake8
-    ```
+3. If one of your reporters will fail check if it is installed.
+For example if you have error
+	```
+	[FAIL] eslint jsapp/src/ (eslint) FileNotFoundError: [Errno 2] No such file or directory: 'eslint'
+	```
+	Install eslint `npm install -g eslint`
 
-3. Map `.inspectr_connector.json` in your backend container configuration in `docker-compose.yml` file, for example:
-    ```
-    backend:
-      image: ${BACKEND_IMAGE}
-      volumes:
-       - /s/inspectr/.inspectr_connector.json:/root/.inspectr_connector.json
-    ```
+4. If you're inspecting django app local, install django in your virtualenv.
 
-4. Add command that runs inspectr during backend container startup. For example you can add it to tools/run_backend.sh:
-    ```
-    if [[ -n "$INSPECTR" ]] && [ "$INSPECTR" == "inspect" ]; then
-        echo "Env set - running inspectr"
-        cd /backend
-        inspectr &
-    else
-        echo "Not running inspectr - env not set"
-    fi
-    ```
-5. Add environment variable `INSPECTR = 'inspect'` to backend container configuration in `docker-compose.yml` file.
-
-6. Add necessary requirements to backend container:
-    ```
-    inspectr==0.1.0
-    flake8==2.5.4
-    radon==1.4.0
-    coverage==4.1
-    pytest==2.9.2
-    pytest-django==2.9.1
-    ```
-
-
-[rethink]:https://www.rethinkdb.com/
-[dashboard]:https://git.teonite.net/inspectr/inspectr-dashboard
+[rethink]:(https://www.rethinkdb.com/)
+[dashboard]:(https://git.teonite.net/inspectr/inspectr-dashboard)
