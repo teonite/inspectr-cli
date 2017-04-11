@@ -22,16 +22,15 @@ Those are the ones supported now, more under way:
 * karma-coverage reports
 
 
+# Quick start (for developers)
 
-
-# Quick start docker (recommended)
-
-1. Run RethinkDB, we recommend to use docker-compose in [inspectr-dashboard][dashboard] which is creating RethinkDB container. 
-2. Add `inspectr.json` to your project root directory. Example:
-    ```
+1. Install Inspectr globally from pip `pip3 install inspectr`.
+2. Run inspectr-dashboard with RethinkDB (go [here][dashboard]).
+3. Add inspectr.json to your project root directory. Example:
+```
     {
       "project_name": "My Project",
-      "rethinkdb_host": "db_link",
+      "rethinkdb_host": "localhost",
 	  "rethinkdb_port": 28015,
       
     
@@ -46,19 +45,28 @@ Those are the ones supported now, more under way:
         }
       ]
     }
-    ```
-3. Change `rethinkdb_host` and `rethinkdb_port` if you have to. Leave default values from example if you're using local RethinkDB docker container.   
-4. Build docker image for example: `docker build -t inspectr_cli .` in inspectr directory
-5. Run your docker image (for example: `docker run -t -v $PWD/project:/code inspectr_cli`). 
+```
+4. Use command `inspectr` in this directory.
+5. If everything went ok you should see results in browser.
+
+
+# Using inspectr with docker
+
+1. Run RethinkDB, we recommend to use docker-compose in [inspectr-dashboard][dashboard] which is creating RethinkDB container.
+2. Add `inspectr.json` to your project root directory (example above).
+3. Change `rethinkdb_host` and `rethinkdb_port` if you have to.
+4. Clone this repo using `git clone git@git.teonite.net:inspectr/inspectr.git.`
+5. Build docker image for example: `docker build -t inspectr_cli .` in inspectr directory
+6. Run your docker image (for example: `docker run -t -v $PWD/project:/code inspectr_cli`). 
 Give your `inspectr.json` path instead of `$PWD/project`. If everything went ok report will be sent to rethinkDB and will be available in inspectr-dashboard.
-6. If you're using RethinkDB container local and you'll see error `ConnectionRefusedError: [Errno 111] Connection refused` you have to link RethinkDB container to alias which will be use in `inspectr.json` as rethinkdb_host parameter.
+7. If you're using RethinkDB docker container local, and you'll see error `ConnectionRefusedError: [Errno 111] Connection refused` you have to link RethinkDB container to alias which will be use in `inspectr.json` as rethinkdb_host parameter.
 Example: `docker run -t --link inspectrdashboard_rethinkdb_1:db_link -v $PWD:/code inspectr_cli` where `inspectrdashboard_rethinkdb_1` is name of your RethinkDB container and `db_link` is parameter of `rethinkdb_host` in `inspectr.json`.
-7. Your reports should be saved in RethinkDB. Use [inspectr-dashboard][dashboard] to see results in browser.
+8. Your reports should be saved in RethinkDB. Use [inspectr-dashboard][dashboard] to see results in browser.
 
 For more informations check FAQ at the end of README.
 
 
-# How to run inspectr local?
+# Using inspectr locally
 
 1. Run RethinkDB
 2. Install Python virtual environment using, e.x. this code :
@@ -143,7 +151,7 @@ List of reporters:
 3. If one of your reporters will fail check if it is installed.
 For example if you have error
 	```
-	[FAIL] eslint jsapp/src/ (eslint) FileNotFoundError: [Errno 2] No such file or directory: 'eslint'
+	[FAIL] eslint src/ (eslint) FileNotFoundError: [Errno 2] No such file or directory: 'eslint'
 	```
 	Install eslint `npm install -g eslint`
 
