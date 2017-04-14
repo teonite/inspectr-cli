@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='inspectr',
-      version='0.1.0',
+      version='0.8.0',
       description='Code quality InspectR',
       url='',
       author='jchmielewski@teonite.com',
@@ -14,7 +14,8 @@ setup(name='inspectr',
       install_requires=[
           "pytz==2016.4",
           "rethinkdb==2.3.0.post4",
-          "colorama==0.3.7"
+          "colorama==0.3.7",
+          "bumpversion==0.5.3"
       ],
       setup_requires=['pytest-runner'],
       tests_require=[
