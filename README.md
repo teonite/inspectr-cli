@@ -158,8 +158,8 @@ For example if you have error
 4. If you're inspecting django app local, install django in your virtualenv.
 5. If you're using Inspectr in docker and you want to connect with RethinkDB on localhost run `docker run -t --net="host" -v $PWD/project:/code inspectr_cli`
 
-[rethink]:(https://www.rethinkdb.com/)
-[dashboard]:(https://git.teonite.net/inspectr/inspectr-dashboard)
+[rethink]: https://www.rethinkdb.com/
+[dashboard]: https://git.teonite.net/inspectr/inspectr-dashboard
 [eagle-L]: md_imgs/eagle-L.png "Eagle"
 [eagle-R]: md_imgs/eagle-R.png "Eagle"
 [star]: md_imgs/star.png "Star"

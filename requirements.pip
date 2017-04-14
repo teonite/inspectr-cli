@@ -4,4 +4,5 @@ rethinkdb==2.3.0.post4
 pytest-mock==1.1
 pyrsistent==0.11.13
 colorama==0.3.7
+bumpversion==0.5.3
 django
