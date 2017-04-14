@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='inspectr',
-      version='0.8.0',
+      version='0.9.0',
       description='Code quality InspectR',
       url='',
       author='jchmielewski@teonite.com',
