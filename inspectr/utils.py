@@ -2,9 +2,15 @@ from copy import deepcopy
 import sys
 import rethinkdb as r
 from colorama import Style, Fore
+import os
 
 
 common_required_settings = ['project_name', 'reporters', 'rethinkdb_host', 'rethinkdb_port']
+env_config_matches = (
+    ('project_name', 'INSPECTR_PROJECT_NAME'),
+    ('rethinkdb_host', 'INSPECTR_RETHINKDB_HOST'),
+    ('rethinkdb_port', 'INSPECTR_RETHINKDB_PORT'),
+)
 default_settings = {
     'rethinkdb_db': 'inspectr'
 }
@@ -12,8 +18,21 @@ default_settings = {
 required_reporter_settings = ['type', 'command']
 
 
+def add_env_to_config(config):
+    new_config = config
+    for env_config_match in env_config_matches:
+        config_field, env_field = env_config_match
+        new_config[config_field] = os.getenv(env_field, config[config_field])
+
+    return new_config
+
+
 def validate_and_parse_config(config_in):
     config = deepcopy(config_in)
+
+    # add env specified variables for config
+    config = add_env_to_config(config)
+
     # check if all required configuration options are present in config file
     if None in [config.get(key) for key in common_required_settings]:
         print('Error: Incomplete configuration (required settings: %s)' % common_required_settings)
