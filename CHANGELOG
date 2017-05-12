@@ -1,2 +1,3 @@
 v 0.9.1
 - add ability to specify project name and rethinkdb config by env variables
+- add upload script to pypi
