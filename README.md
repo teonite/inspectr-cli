@@ -70,11 +70,11 @@ For more informations check FAQ at the end of README.
 
 1. Run RethinkDB
 2. Install Python virtual environment using, e.x. this code :
-```
-pip3 install virtualenv
-virtualenv env
-source env/bin/activate
-```
+    ```
+    pip3 install virtualenv
+    virtualenv env
+    source env/bin/activate
+    ```
 3. Install InspectR CLI to your venv
 `python setup.py install`
 4. Place inspectr.json in your project directory (example above) and use command `inspectr`.
@@ -144,7 +144,9 @@ List of reporters:
  
 1. If you have problems setting up Your RethinkDB instance, simply run
  it as Docker container:
-`docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb`
+    ```
+    docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
+    ```
 
 2. You have to run inspectr at your app first to create Collections in RethinkDB, otherwise you'll see error "Collection *reports* does not exist" 
 
@@ -156,7 +158,7 @@ For example if you have error
 	Install eslint `npm install -g eslint`
 
 4. If you're inspecting django app local, install django in your virtualenv.
-5. If you're using Inspectr in docker and you want to connect with RethinkDB on localhost run `docker run -t --net="host" -v $PWD/project:/code inspectr_cli`
+5. If you're using Inspectr in docker and you want to connect with RethinkDB running locally (not as a container) run `docker run -t --net="host" -v $PWD/project:/code inspectr_cli`
 
 [rethink]: https://www.rethinkdb.com/
 [dashboard]: https://git.teonite.net/inspectr/inspectr-dashboard
