@@ -22,7 +22,7 @@ Those are the ones supported now, more under way:
 * karma-coverage reports
 
 
-# Quick start (for developers)
+# Quick start
 
 1. Install Inspectr globally from pip `pip3 install inspectr`.
 2. Run inspectr-dashboard with RethinkDB (go [here][dashboard]).
