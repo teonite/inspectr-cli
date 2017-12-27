@@ -25,7 +25,7 @@ Those are the ones supported now, more under way:
 # Quick start
 
 1. Install Inspectr globally from pip `pip3 install inspectr`.
-2. Run inspectr-dashboard with RethinkDB (go [here][dashboard]).
+2. Run [inspectr-dashboard][dashboard] with RethinkDB.
 3. Add inspectr.json to your project root directory. Example:
 ```
     {
