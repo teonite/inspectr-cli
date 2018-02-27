@@ -1,10 +1,10 @@
- ![eagle-R]
+ ![top]
 
 
 # What is InspectR?
 
-InspectR gives you insight into quality of your code at a glance. It supports variety of code quality tools. 
-When you add `inspectr.json` file to your project directory and use command `inspectr` reports from your test tools will be created and save in RethinkDB. 
+InspectR gives you insight into quality of your code at a glance. It supports variety of code quality tools.
+When you add `inspectr.json` file to your project directory and use command `inspectr` reports from your test tools will be created and save in RethinkDB.
 
 The reports will be able in [inspectr-dashboard][dashboard] and it looks like this
 
@@ -25,15 +25,18 @@ Those are the ones supported now, more under way:
 # Quick start
 
 1. Install Inspectr globally from pip `pip3 install inspectr`.
-2. Run [inspectr-dashboard][dashboard] with RethinkDB.
+2. Start RethinkDB
+    ```
+    docker run -d -p 8080:8080 -p 28015:28015 rethinkdb:2.3
+    ```
 3. Add inspectr.json to your project root directory. Example:
 ```
     {
       "project_name": "My Project",
       "rethinkdb_host": "localhost",
-	  "rethinkdb_port": 28015,
-      
-    
+      "rethinkdb_port": 28015,
+
+
       "reporters": [
         {
           "type": "jasmine",
@@ -47,7 +50,8 @@ Those are the ones supported now, more under way:
     }
 ```
 4. Use command `inspectr` in this directory.
-5. If everything went ok you should see results in browser.
+5. Run [inspectr-dashboard][dashboard] with RethinkDB.
+6. If everything went ok you should see results in browser.
 
 
 # Using inspectr with docker
@@ -57,7 +61,7 @@ Those are the ones supported now, more under way:
 3. Change `rethinkdb_host` and `rethinkdb_port` if you have to.
 4. Clone this repo using `git clone git@git.teonite.net:inspectr/inspectr.git.`
 5. Build docker image for example: `docker build -t inspectr_cli .` in inspectr directory
-6. Run your docker image (for example: `docker run -t -v $PWD/project:/code inspectr_cli`). 
+6. Run your docker image (for example: `docker run -t -v $PWD/project:/code inspectr_cli`).
 Give your `inspectr.json` path instead of `$PWD/project`. If everything went ok report will be sent to rethinkDB and will be available in inspectr-dashboard.
 7. If you're using RethinkDB docker container local, and you'll see error `ConnectionRefusedError: [Errno 111] Connection refused` you have to link RethinkDB container to alias which will be use in `inspectr.json` as rethinkdb_host parameter.
 Example: `docker run -t --link inspectrdashboard_rethinkdb_1:db_link -v $PWD:/code inspectr_cli` where `inspectrdashboard_rethinkdb_1` is name of your RethinkDB container and `db_link` is parameter of `rethinkdb_host` in `inspectr.json`.
@@ -99,7 +103,7 @@ List of reporters:
 ```
 {
       "project_name": "My Project",
-    
+
       "reporters": [
         {
           "type": "flake8",
@@ -141,19 +145,19 @@ List of reporters:
 
 
 # FAQ
- 
+
 1. If you have problems setting up Your RethinkDB instance, simply run
  it as Docker container:
     ```
     docker run -d -p 8080:8080 -p 28015:28015 -p 29015:29015 rethinkdb
     ```
 
-2. You have to run inspectr at your app first to create Collections in RethinkDB, otherwise you'll see error "Collection *reports* does not exist" 
+2. You have to run inspectr at your app first to create Collections in RethinkDB, otherwise you'll see error "Collection *reports* does not exist"
 
 3. If one of your reporters will fail check if it is installed.
 For example if you have error
 	```
-	[FAIL] eslint src/ (eslint) FileNotFoundError: [Errno 2] No such file or directory: 'eslint'
+[FAIL] eslint src/ (eslint) FileNotFoundError: [Errno 2] No such file or directory: 'eslint'
 	```
 	Install eslint `npm install -g eslint`
 
@@ -162,7 +166,5 @@ For example if you have error
 
 [rethink]: https://www.rethinkdb.com/
 [dashboard]: https://git.teonite.net/inspectr/inspectr-dashboard
-[eagle-L]: md_imgs/eagle-L.png "Eagle"
-[eagle-R]: md_imgs/eagle-R.png "Eagle"
-[star]: md_imgs/star.png "Star"
-[example]: md_imgs/example.png "Example"
+[top]: md_imgs/top.png "Badge"
+[example]: md_imgs/dashboard_preview.png "Example"
