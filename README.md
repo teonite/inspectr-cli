@@ -4,9 +4,9 @@
 # What is InspectR?
 
 InspectR gives you insight into quality of your code at a glance. It supports variety of code quality tools.
-When you add `inspectr.json` file to your project directory and use command `inspectr` reports from your test tools will be created and save in RethinkDB.
+When you add `inspectr.json` file to your project directory and use command `inspectr` reports from your test tools will be created and saved in RethinkDB.
 
-The reports will be able in [inspectr-dashboard][dashboard] and it looks like this
+You can see the reports using [inspectr-dashboard][dashboard], it looks like this:
 
 ![example]
 
@@ -56,14 +56,14 @@ Those are the ones supported now, more under way:
 
 # Using inspectr with docker
 
-1. Run RethinkDB, we recommend to use docker-compose in [inspectr-dashboard][dashboard] which is creating RethinkDB container.
+1. Run RethinkDB, we recommend to use docker-compose in [inspectr-dashboard][dashboard] creates RethinkDB container.
 2. Add `inspectr.json` to your project root directory (example above).
 3. Change `rethinkdb_host` and `rethinkdb_port` if you have to.
 4. Clone this repo using `git clone git@git.teonite.net:inspectr/inspectr.git.`
-5. Build docker image for example: `docker build -t inspectr_cli .` in inspectr directory
+5. Build docker image, for example: `docker build -t inspectr_cli .` in inspectr directory
 6. Run your docker image (for example: `docker run -t -v $PWD/project:/code inspectr_cli`).
 Give your `inspectr.json` path instead of `$PWD/project`. If everything went ok report will be sent to rethinkDB and will be available in inspectr-dashboard.
-7. If you're using RethinkDB docker container local, and you'll see error `ConnectionRefusedError: [Errno 111] Connection refused` you have to link RethinkDB container to alias which will be use in `inspectr.json` as rethinkdb_host parameter.
+7. If you're using RethinkDB docker container locally, and you'll see error `ConnectionRefusedError: [Errno 111] Connection refused` you have to link RethinkDB container to alias which will be use in `inspectr.json` as rethinkdb_host parameter.
 Example: `docker run -t --link inspectrdashboard_rethinkdb_1:db_link -v $PWD:/code inspectr_cli` where `inspectrdashboard_rethinkdb_1` is name of your RethinkDB container and `db_link` is parameter of `rethinkdb_host` in `inspectr.json`.
 8. Your reports should be saved in RethinkDB. Use [inspectr-dashboard][dashboard] to see results in browser.
 
