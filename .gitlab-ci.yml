@@ -15,7 +15,7 @@ pip_register:
   stage: deploy
   script:
     - pip install setuptools
-    - echo -e "[teonite]\nusername = ${PYPI_USERNAME}\npassword = ${PYPI_PASSWORD}" > ~/.pypirc
+    - echo -e "[teonite]\nrepository:https://pypi.teonite.net/simple/\nusername:${PYPI_USERNAME}\npassword:${PYPI_PASSWORD}" > ~/.pypirc
     - python setup.py register -r teonite sdist upload -r teonite
   tags:
     - shell
