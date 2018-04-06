@@ -9,7 +9,6 @@ build_image:
     - docker build -t tcn.re/inspectr/inspectr .
     - docker push tcn.re/inspectr/inspectr
   tags:
-    - shell
     - linux
 
 pip_register:
@@ -19,7 +18,6 @@ pip_register:
     - echo -e "[distutils]\nindex-servers =\n teonite\n\n[teonite]\nrepository:https://pypi.teonite.net/simple/\nusername:${PYPI_USERNAME}\npassword:${PYPI_PASSWORD}" > ~/.pypirc
     - python setup.py register -r teonite sdist upload -r teonite
   tags:
-    - shell
     - linux
 
 inspect:
@@ -28,5 +26,4 @@ inspect:
     - docker run -v $(pwd):/code -v /home/gitlab-runner/.inspectr_connector.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr || true
     - docker run -v $(pwd):/code tcn.re/inspectr/inspectr find /code -user root -exec rm -rf "{}" ';' || true
   tags:
-    - shell
     - linux
