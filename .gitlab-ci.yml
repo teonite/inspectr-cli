@@ -10,6 +10,7 @@ build_image:
     - docker push tcn.re/inspectr/inspectr
   tags:
     - shell
+    - linux
 
 pip_register:
   stage: deploy
@@ -19,6 +20,7 @@ pip_register:
     - python setup.py register -r teonite sdist upload -r teonite
   tags:
     - shell
+    - linux
 
 inspect:
   stage: inspect
@@ -27,3 +29,4 @@ inspect:
     - docker run -v $(pwd):/code tcn.re/inspectr/inspectr find /code -user root -exec rm -rf "{}" ';' || true
   tags:
     - shell
+    - linux
