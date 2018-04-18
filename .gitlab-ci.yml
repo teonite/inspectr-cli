@@ -14,7 +14,7 @@ stages:
 build_image:
   stage: build
   script:
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $CI_REGISTRY
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
   tags:
