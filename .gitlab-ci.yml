@@ -3,6 +3,12 @@ image: docker
 services:
   - docker:dind
 
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+before_script:
+  - docker login -u $CI_USER -p $CI_TOKEN $CI_REGISTRY
+
 stages:
   - build
   - deploy
@@ -11,8 +17,8 @@ stages:
 build_image:
   stage: build
   script:
-    - docker build -t tcn.re/inspectr/inspectr .
-    - docker push tcn.re/inspectr/inspectr
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
   tags:
     - docker
 
@@ -20,15 +26,15 @@ pip_register:
   stage: deploy
   script:
     - pip install setuptools
-    - echo -e "[distutils]\nindex-servers =\n teonite\n\n[teonite]\nrepository:https://pypi.teonite.net/simple/\nusername:${PYPI_USERNAME}\npassword:${PYPI_PASSWORD}" > ~/.pypirc
-    - python setup.py register -r teonite sdist upload -r teonite
+    - echo -e "[distutils]\nindex-servers =\n pypi\n\n[pypi]\nrepository:https://pypi.python.org/pypi\nusername:${PYPI_USERNAME}\npassword:${PYPI_PASSWORD}" > ~/.pypirc
+    - python setup.py register -r pypi sdist upload -r pypi
   tags:
     - docker
 
 inspect:
   stage: inspect
   script:
-    - docker run -v $(pwd):/code -v /home/gitlab-runner/.inspectr_connector.json:/root/.inspectr_connector.json tcn.re/inspectr/inspectr || true
-    - docker run -v $(pwd):/code tcn.re/inspectr/inspectr find /code -user root -exec rm -rf "{}" ';' || true
+    - docker run -v $(pwd):/code $IMAGE_TAG || true
+    - docker run -v $(pwd):/code $IMAGE_TAG find /code -user root -exec rm -rf "{}" ';' || true
   tags:
     - docker
