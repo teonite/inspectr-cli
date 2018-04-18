@@ -22,6 +22,7 @@ build_image:
 
 pip_register:
   stage: deploy
+  image: python:3.6
   script:
     - pip install setuptools
     - echo -e "[distutils]\nindex-servers =\n pypi\n\n[pypi]\nrepository:https://pypi.python.org/pypi\nusername:${PYPI_USERNAME}\npassword:${PYPI_PASSWORD}" > ~/.pypirc
