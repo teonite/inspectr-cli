@@ -8,8 +8,7 @@ variables:
 
 stages:
   - build
-  - deploy
-  - inspect
+  - pip
 
 build_image:
   stage: build
@@ -21,7 +20,7 @@ build_image:
     - docker
 
 pip_register:
-  stage: deploy
+  stage: pip
   image: python:3.6
   script:
     - pip install setuptools
