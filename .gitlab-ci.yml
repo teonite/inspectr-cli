@@ -29,11 +29,3 @@ pip_register:
     - python setup.py register -r pypi sdist upload -r pypi
   tags:
     - docker
-
-inspect:
-  stage: inspect
-  script:
-    - docker run -v $(pwd):/code $IMAGE_TAG || true
-    - docker run -v $(pwd):/code $IMAGE_TAG find /code -user root -exec rm -rf "{}" ';' || true
-  tags:
-    - docker
