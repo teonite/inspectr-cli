@@ -165,6 +165,6 @@ For example if you have error
 5. If you're using Inspectr in docker and you want to connect with RethinkDB running locally (not as a container) run `docker run -t --net="host" -v $PWD/project:/code inspectr_cli`
 
 [rethink]: https://www.rethinkdb.com/
-[dashboard]: https://git.teonite.net/inspectr/inspectr-dashboard
+[dashboard]: https://gitlab.com/teonite/inspectr-dashboard
 [top]: md_imgs/top.png "Badge"
 [example]: md_imgs/dashboard_preview.png "Example"
